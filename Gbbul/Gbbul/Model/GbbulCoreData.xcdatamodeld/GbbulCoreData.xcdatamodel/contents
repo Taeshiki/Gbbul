@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="21754" systemVersion="22F66" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="Book" representedClassName="Book" syncable="YES" codeGenerationType="class">
+        <attribute name="bookId" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="bookName" attributeType="String"/>
+        <attribute name="createDate" attributeType="String"/>
+    </entity>
+    <entity name="CorrectRate" representedClassName="CorrectRate" syncable="YES" codeGenerationType="class">
+        <attribute name="bookId" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="correct" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="incorrect" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="rate" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="total" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+    </entity>
+    <entity name="MyBook" representedClassName="MyBook" syncable="YES" codeGenerationType="class">
+        <attribute name="bookId" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="myBookName" attributeType="String"/>
+        <attribute name="myCreateDate" attributeType="String"/>
+    </entity>
+    <entity name="MyVoca" representedClassName="MyVoca" syncable="YES" codeGenerationType="class">
+        <attribute name="bookId" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="myCreateDate" attributeType="String"/>
+        <attribute name="myVocaId" attributeType="String"/>
+        <attribute name="myVocaMean" attributeType="String"/>
+        <attribute name="myVocaName" attributeType="String"/>
+    </entity>
+    <entity name="User" representedClassName="User" syncable="YES" codeGenerationType="class">
+        <attribute name="exp" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="level" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="name" attributeType="String"/>
+    </entity>
+    <entity name="Voca" representedClassName="Voca" syncable="YES" codeGenerationType="class">
+        <attribute name="bookId" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="createDate" attributeType="String"/>
+        <attribute name="vocaId" attributeType="String"/>
+        <attribute name="vocaMean" attributeType="String"/>
+        <attribute name="vocaName" attributeType="String"/>
+    </entity>
+</model>
