@@ -8,23 +8,23 @@
 import UIKit
 
 class SignInViewController: UIViewController {
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-
-        // Do any additional setup after loading the view.
+        let button = UIButton(type: .custom)
+        let buttonImage = UIImage(systemName: "book") 
+        button.setImage(buttonImage, for: .normal)
+        button.addTarget(self, action: #selector(showTabBarController), for: .touchUpInside)
+        let buttonSize = CGSize(width: 100, height: 100)
+        button.frame.size = buttonSize
+        button.center = view.center
+        view.addSubview(button)
     }
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    @objc func showTabBarController() {
+        let tabBarController = UITabBarController()
+        tabBarController.setupTabBarController()
+        present(tabBarController, animated: true)
+        UserDefaults.standard.setValue(true, forKey: "isUserLoggedIn")
     }
-    */
-
 }
