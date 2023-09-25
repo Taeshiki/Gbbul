@@ -39,13 +39,13 @@ extension UITabBarController {
         let myBookViewController = MyBookViewController()
         let myPageViewController = MyPageViewController()
         
-        let bookIcon = UIImage(systemName: "play.rectangle")
+        let bookIcon = UIImage(systemName: "book.circle")
         bookViewController.tabBarItem = UITabBarItem(title: "단어 공유소", image: bookIcon, tag: 0)
         
-        let myBookIcon = UIImage(systemName: "person.crop.rectangle")
+        let myBookIcon = UIImage(systemName: "book.circle.fill")
         myBookViewController.tabBarItem = UITabBarItem(title: "내 단어장", image: myBookIcon, tag: 1)
         
-        let myPageIcon = UIImage(systemName: "person.crop.rectangle")
+        let myPageIcon = UIImage(systemName: "person.circle")
         myPageViewController.tabBarItem = UITabBarItem(title: "마이페이지", image: myPageIcon, tag: 2)
         
         viewControllers = [bookViewController, myBookViewController, myPageViewController]
