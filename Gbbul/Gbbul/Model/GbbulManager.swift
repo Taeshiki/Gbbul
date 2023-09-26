@@ -57,24 +57,44 @@ class GbbulManager {
         }
     }
     
+    
     func createMyBook(name: String, id: Int){
         guard let myBookEntity = NSEntityDescription.entity(forEntityName: "MyBook", in: mainContext) else {
             fatalError("MyBook Entity를 찾을 수 없습니다.")
         }
-
+        
         let myBook = NSManagedObject(entity: myBookEntity, insertInto: mainContext)
-
+        
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
         let currentDate = Date()
         let dateString = dateFormatter.string(from: currentDate)
-
+        
         myBook.setValue(id, forKey: "bookId")
         myBook.setValue(name, forKey: "myBookName")
         myBook.setValue(dateString, forKey: "myCreateDate")
-
+        
         saveContext()
     }
     
-
+    
+    func getBook() -> [MyBook]? {
+        var bookList: [MyBook] = []
+        
+        do {
+            let fetchBookList = try mainContext.fetch(MyBook.fetchRequest())
+            bookList = fetchBookList
+        } catch {
+            print("데이터를 가져오는 중 오류 발생: \(error)")
+            return nil
+        }
+        return bookList
+    }
+    
+    
 }
+
+
+
+
+

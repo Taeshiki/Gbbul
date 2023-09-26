@@ -8,10 +8,9 @@
 import UIKit
 import CoreData
 
-class MyBookViewController: UIViewController {
+class MyBookViewController: BaseViewController {
     private var manager = GbbulManager()
-    var bookList = ["토익 500점 단어장", "토익 600점 단어장", "토익 700점 단어장", "토익 800점 단어장"]// 참고용
-    
+
     private lazy var titleLabel = {
         let label = UILabel()
         label.setUpLabel(title: "단어장 추가하기", fontSize: .large)
@@ -43,13 +42,16 @@ class MyBookViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
-       // bookList = []
         
         addSubView()
         makeConstraints()
         setupTableView()
         
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        tableView.reloadData()
     }
     
     
@@ -97,7 +99,7 @@ class MyBookViewController: UIViewController {
         tableView.dataSource = self
         self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "BookCell")
         
-        if bookList.isEmpty {
+        if manager.getBook()!.isEmpty {
             tableView.isHidden = true
         } else {
             tableView.isHidden = false
@@ -139,12 +141,12 @@ extension MyBookViewController: UITableViewDelegate {
 extension MyBookViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return bookList.count
+        return manager.getBook()?.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "BookCell", for: indexPath)
-        cell.textLabel?.text = bookList[indexPath.row]
+        cell.textLabel?.text = manager.getBook()?[indexPath.row].myBookName
         cell.textLabel?.font = UIFont.systemFont(ofSize: LabelFontSize.medium.rawValue)
         return cell
     }

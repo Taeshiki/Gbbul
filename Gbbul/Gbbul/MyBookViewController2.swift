@@ -9,7 +9,7 @@ import UIKit
 import SwiftUI
 import CoreData
 
-class MyBookViewController2: UIViewController {
+class MyBookViewController2: BaseViewController {
     private var manager = GbbulManager()
     
     private lazy var titleLabel = {
@@ -53,7 +53,6 @@ class MyBookViewController2: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .systemBackground
 //        print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
         addSubView()
         makeConstraints()
