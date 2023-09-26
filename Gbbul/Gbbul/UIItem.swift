@@ -27,6 +27,7 @@ extension UILabel {
         self.textColor = titleColor
     }
 }
+
 extension UITextField{
     func setUpTextField(){
         self.layer.cornerRadius = 10
@@ -57,6 +58,37 @@ extension Date{
     }
 }
 
+extension UITextField{
+    func setUpTextField(){
+        self.layer.cornerRadius = 10
+        self.layer.masksToBounds = true
+        self.layer.borderWidth = 1.0
+        self.layer.borderColor = Palette.boldPink.getColor().cgColor
+        let leftPaddingView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: self.frame.size.height))
+        self.leftView = leftPaddingView
+        self.leftViewMode = .always
+    }
+}
+
+extension UIViewController {
+    func showAlert(title: String?, message: String?, buttonTitle: String = "OK", completion: (() -> Void)? = nil) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let action = UIAlertAction(title: buttonTitle, style: .default) { _ in
+        }
+        alert.addAction(action)
+        present(alert, animated: true, completion: nil)
+    }
+}
+
+extension Date {
+    func GetCurrentTime() -> String{
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        let dateString = formatter.string(from: self)
+        return dateString
+    }
+}
+
 enum Palette {
     case boldPink
     case pink
@@ -77,16 +109,19 @@ enum Palette {
     }
     
 }
+
 enum LabelFontSize: CGFloat {
     case small = 10
     case medium = 18
     case large = 25
 }
+
 enum constMargin {
     case safeAreaTopMargin
     case safeAreaLeftMargin
     case safeAreaRightMargin
     case safeAreaBottomMargin
+
     func getMargin() -> Double {
         switch self {
         case .safeAreaTopMargin:
