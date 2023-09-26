@@ -7,7 +7,7 @@
 
 import UIKit
 
-class BookViewController: UIViewController {
+class BookInformationViewController: UIViewController {
     // 테이블뷰
     private let tableView: UITableView = {
         let tableView = UITableView()
@@ -23,6 +23,10 @@ class BookViewController: UIViewController {
         let bookViewTitleLabel = UILabel()
         bookViewTitleLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(bookViewTitleLabel)
+        // 버튼 생성
+        let studyButton = UIButton()
+        studyButton.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(studyButton)
         
         //테이블뷰 설정
         tableView.delegate = self
@@ -43,18 +47,29 @@ class BookViewController: UIViewController {
         tableView.topAnchor.constraint(equalTo: bookViewTitleLabel.bottomAnchor, constant: 20).isActive = true
         tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: constMargin.safeAreaLeftMargin.getMargin()).isActive = true
         tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -constMargin.safeAreaRightMargin.getMargin()).isActive = true
-        tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -constMargin.safeAreaBottomMargin.getMargin()).isActive = true
+        tableView.bottomAnchor.constraint(equalTo: studyButton.topAnchor, constant: -20).isActive = true
         // 제약 조건
         bookViewTitleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         bookViewTitleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: constMargin.safeAreaTopMargin.getMargin()).isActive = true
         
+        // 버튼 설정
+        studyButton.setUpButton(title: "학습하기")
+        
+        // 버튼 제약조건
+        studyButton.topAnchor.constraint(equalTo: tableView.bottomAnchor, constant: -20).isActive = true
+        studyButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        studyButton.widthAnchor.constraint(equalToConstant: 100).isActive = true
+        studyButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        studyButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -constMargin.safeAreaBottomMargin.getMargin()).isActive = true
+        
+        
         // 라벨 생성
-        bookViewTitleLabel.setUpLabel(title: "단어장 추가하기", fontSize: .large)
+        bookViewTitleLabel.setUpLabel(title: "cellId", fontSize: .large)
         
     }
 }
 
-extension BookViewController: UITableViewDataSource, UITableViewDelegate {
+extension BookInformationViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // 테이블 뷰의 셀 개수 반환
@@ -68,9 +83,6 @@ extension BookViewController: UITableViewDataSource, UITableViewDelegate {
         return cell
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let viewController = BookInformationViewController()
-        viewController.modalPresentationStyle = .fullScreen
-        self.present(viewController, animated: true)
-    }
 }
+
+// 화면이동 뭘로 하지?

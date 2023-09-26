@@ -20,6 +20,7 @@
 		26975CFA2AC192BB0052D5D3 /* GbbulCoreData.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 26975CF82AC192BB0052D5D3 /* GbbulCoreData.xcdatamodeld */; };
 		26EB19742AC196BB00A1B78B /* GbbulManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26EB19732AC196BB00A1B78B /* GbbulManager.swift */; };
 		26EB19762AC198F600A1B78B /* UIItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26EB19752AC198F600A1B78B /* UIItem.swift */; };
+		26EB197A2AC2CD9400A1B78B /* BookInformationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26EB19792AC2CD9400A1B78B /* BookInformationViewController.swift */; };
 		27E9DB132AC283B6008DD8D8 /* myVocaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27E9DB122AC283B6008DD8D8 /* myVocaView.swift */; };
 		27E9DB152AC28412008DD8D8 /* myVocaView2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27E9DB142AC28412008DD8D8 /* myVocaView2.swift */; };
 		67D0057B2AC2800C001A1CD3 /* MyBookViewController2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67D0057A2AC2800C001A1CD3 /* MyBookViewController2.swift */; };
@@ -41,9 +42,11 @@
 		26975CF92AC192BB0052D5D3 /* GbbulCoreData.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = GbbulCoreData.xcdatamodel; sourceTree = "<group>"; };
 		26EB19732AC196BB00A1B78B /* GbbulManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GbbulManager.swift; sourceTree = "<group>"; };
 		26EB19752AC198F600A1B78B /* UIItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIItem.swift; sourceTree = "<group>"; };
+		26EB19792AC2CD9400A1B78B /* BookInformationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookInformationViewController.swift; sourceTree = "<group>"; };
 		27E9DB122AC283B6008DD8D8 /* myVocaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = myVocaView.swift; sourceTree = "<group>"; };
 		27E9DB142AC28412008DD8D8 /* myVocaView2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = myVocaView2.swift; sourceTree = "<group>"; };
 		67D0057A2AC2800C001A1CD3 /* MyBookViewController2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyBookViewController2.swift; sourceTree = "<group>"; };
+
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,6 +84,7 @@
 				26975CC92AC16ACA0052D5D3 /* AppDelegate.swift */,
 				26975CCB2AC16ACA0052D5D3 /* SceneDelegate.swift */,
 				26975CE02AC16B300052D5D3 /* BookViewController.swift */,
+				26EB19792AC2CD9400A1B78B /* BookInformationViewController.swift */,
 				26975CDF2AC16B300052D5D3 /* MyBookViewController.swift */,
 				27E9DB122AC283B6008DD8D8 /* myVocaView.swift */,
 				27E9DB142AC28412008DD8D8 /* myVocaView2.swift */,
@@ -191,6 +195,7 @@
 				26EB19742AC196BB00A1B78B /* GbbulManager.swift in Sources */,
 				26975CFA2AC192BB0052D5D3 /* GbbulCoreData.xcdatamodeld in Sources */,
 				26975CE22AC16B300052D5D3 /* SignInViewController.swift in Sources */,
+				26EB197A2AC2CD9400A1B78B /* BookInformationViewController.swift in Sources */,
 				27E9DB132AC283B6008DD8D8 /* myVocaView.swift in Sources */,
 				26975CE12AC16B300052D5D3 /* MyPageViewController.swift in Sources */,
 				26EB19762AC198F600A1B78B /* UIItem.swift in Sources */,
