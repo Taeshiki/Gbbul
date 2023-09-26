@@ -7,9 +7,10 @@
 
 import UIKit
 import SwiftUI
+import CoreData
 
 class MyBookViewController2: UIViewController {
-    var bookList = [String]()
+    private var manager = GbbulManager()
     
     private lazy var titleLabel = {
         let label = UILabel()
@@ -49,10 +50,11 @@ class MyBookViewController2: UIViewController {
     
     
     // MARK: - LifeCycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
-        
+//        print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
         addSubView()
         makeConstraints()
         textField.delegate = self
@@ -60,7 +62,8 @@ class MyBookViewController2: UIViewController {
     }
     
     
-    // MAKR: - Function
+    // MARK: - Function
+    
     func addSubView(){
         view.addSubview(titleLabel)
         view.addSubview(holderLabel)
@@ -100,12 +103,11 @@ class MyBookViewController2: UIViewController {
     
     @objc func addButtonTapped(){
         if let newBookName = textField.text, !newBookName.isEmpty {
-            bookList.append(newBookName)
-            print("북리스트 : \(bookList)")
-        }
-        textField.text = ""
-        self.dismiss(animated: true, completion: nil)
-    }
+            manager.createMyBook(name: newBookName, id: 0)
+         }
+         textField.text = ""
+         self.dismiss(animated: true, completion: nil)
+     }
     
     
 }

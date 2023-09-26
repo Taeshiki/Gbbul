@@ -6,11 +6,11 @@
 //
 
 import UIKit
-import SnapKit
+import CoreData
 
 class MyBookViewController: UIViewController {
     private var manager = GbbulManager()
-    var bookList = ["토익 500점 단어장", "토익 600점 단어장", "토익 700점 단어장", "토익 800점 단어장"] // 참고용
+    var bookList = ["토익 500점 단어장", "토익 600점 단어장", "토익 700점 단어장", "토익 800점 단어장"]// 참고용
     
     private lazy var titleLabel = {
         let label = UILabel()
@@ -44,7 +44,7 @@ class MyBookViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        // bookList = []
+       // bookList = []
         
         addSubView()
         makeConstraints()
@@ -107,10 +107,9 @@ class MyBookViewController: UIViewController {
     
     @objc func addBookButtonTapped(){
         // 네비게이션 컨트롤러 안쓰는지?
-        let addVC = MyBookViewController2()
-        addVC.modalPresentationStyle = .fullScreen
-        addVC.bookList = self.bookList
-        self.present(addVC, animated: true, completion: nil)
+        let nextVC = MyBookViewController2()
+        nextVC.modalPresentationStyle = .fullScreen
+        self.present(nextVC, animated: true, completion: nil)
     }
     
     
