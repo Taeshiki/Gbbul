@@ -90,6 +90,7 @@ class MyPageViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configUI()
+        getCorrectRateData()
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
@@ -171,14 +172,41 @@ extension MyPageViewController{
         let exp = currentUser.exp
         setRate(number: Int(exp))
     }
+    private func getCorrectRateData(){
+        // Todo CoreData 기준으로 분류
+        for correctRate in correctRates {
+            let bookId = correctRate.bookId
+            let bookName: String
+            var rate: Double
+            if bookId >= 5001 {
+                if let voca = vocas.first(where: { $0.bookId == bookId }) {
+                    bookName = voca.myBookName
+                    rate = correctRate.rate
+                    vocaData.append((bookId: bookId, bookName: bookName, rate: rate))
+                }
+            } else {
+                if let book = myBooks.first(where: { $0.bookId == bookId }) {
+                    bookName = book.myBookName
+                    rate = correctRate.rate
+                    bookData.append((bookId: bookId, bookName: bookName, rate: rate))
+                }
+            }
+        }
+        for data in bookData {
+            print("bookData - > bookId: \(data.bookId), bookName: \(data.bookName), rate: \(data.rate)")
+        }
+        for data in vocaData {
+            print("vocaData - > bookId: \(data.bookId), bookName: \(data.bookName), rate: \(data.rate)")
+        }
+    }
 }
 extension MyPageViewController : UITableViewDelegate, UITableViewDataSource
 {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if tableView == bookTableView{
-            return 5
+            return bookData.count
         }else{
-            return 10
+            return vocaData.count
         }
     }
     
@@ -187,16 +215,18 @@ extension MyPageViewController : UITableViewDelegate, UITableViewDataSource
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "MyPageCustomCell") as? MyPageCustomCell else {
                 return UITableViewCell()
             }
-            cell.titleLabel.text = "book테이블뷰adsjksadjkasdljkadsjkladsjkl임"
-            cell.correctRateLabel.text = "정답률 5%"
+            cell.titleLabel.text = bookData[indexPath.row].bookName
+            cell.bookId = bookData[indexPath.row].bookId
+            cell.correctRateLabel.text = "정답률 \(String(bookData[indexPath.row].rate))%"
             return cell
             
         }else{
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "MyPageCustomCell") as? MyPageCustomCell else {
                 return UITableViewCell()
             }
-            cell.titleLabel.text = "ㅁㄴㄹㅁㄴㄹㅁㄴ뤄ㅏㅣㅁㄴ러ㅏㅣㅜㅁㄴ"
-            cell.correctRateLabel.text = "정답률 100%"
+            cell.titleLabel.text = vocaData[indexPath.row].bookName
+            cell.bookId = vocaData[indexPath.row].bookId
+            cell.correctRateLabel.text = "정답률 \(String(vocaData[indexPath.row].rate))%"
             return cell
         }
     }
@@ -204,6 +234,7 @@ extension MyPageViewController : UITableViewDelegate, UITableViewDataSource
         if tableView == bookTableView
         {
             let deleteAction = UIContextualAction(style: .destructive, title: "삭제") { (_, _, completion) in
+                print(bookData[indexPath.row].bookId) // Todo 삭제
                 completion(true)
             }
             let swipeConfig = UISwipeActionsConfiguration(actions: [deleteAction])
@@ -212,6 +243,17 @@ extension MyPageViewController : UITableViewDelegate, UITableViewDataSource
             
         }else{
             return nil
+        }
+    }
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        //Todo 화면전환
+        if tableView == bookTableView
+        {
+            let bookId = bookData[indexPath.row].bookId
+            print("selected booktableView Cell -> : \(bookId)")
+        }else{
+            let bookId = vocaData[indexPath.row].bookId
+            print("selected vocatableView Cell -> : \(bookId)")
         }
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -224,28 +266,30 @@ class MyPageCustomCell : UITableViewCell
     var titleLabel : UILabel = {
         let titleLabel = UILabel()
         titleLabel.setUpLabel(title: "", fontSize: .medium)
-        titleLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
-        titleLabel.setContentHuggingPriority(.required, for: .horizontal)
+        titleLabel.textAlignment = .left
         return titleLabel
     }()
     var correctRateLabel : UILabel = {
         let correctRateLabel = UILabel()
         correctRateLabel.setUpLabel(title: "", fontSize: .medium)
         correctRateLabel.textAlignment = .right
-        correctRateLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
-        correctRateLabel.setContentHuggingPriority(.required, for: .horizontal)
         return correctRateLabel
     }()
     var bookId : Int = 0
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        self.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        configCellStyle()
         configUI()
     }
     required init?(coder aDecoder: NSCoder) {
         fatalError("MyPageCustomCell coder Error")
     }
-    func configUI() {
+    private func configCellStyle(){
+        self.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        self.selectionStyle = .none
+    }
+    
+    private func configUI() {
         [titleLabel, correctRateLabel].forEach(contentView.addSubview)
         titleLabel.snp.makeConstraints {
             $0.centerY.equalToSuperview()
@@ -259,3 +303,53 @@ class MyPageCustomCell : UITableViewCell
         }
     }
 }
+
+//Dummy
+struct correctRate{
+    let bookId : Int
+    let total : Int
+    let correct : Int
+    let incorrect : Int
+    let rate : Double
+}
+struct book{
+    let bookId : Int
+    let myBookName : String
+    let myCreateDate : String
+    
+}
+struct voca{
+    let bookId : Int
+    let myBookName : String
+    let myCreateDate : String
+}
+let myBooks: [book] = [
+    book(bookId: 0, myBookName: "IT 용어사전", myCreateDate: Date().GetCurrentTime()),
+    book(bookId: 1, myBookName: "영어 단어장", myCreateDate: Date().GetCurrentTime()),
+    book(bookId: 2, myBookName: "포르투갈어 단어장", myCreateDate: Date().GetCurrentTime()),
+    book(bookId: 3, myBookName: "스페인어 단어장", myCreateDate: Date().GetCurrentTime())
+]
+
+let vocas: [voca] = [
+    voca(bookId: 5001, myBookName: "정보처리기사 용어", myCreateDate: Date().GetCurrentTime()),
+    voca(bookId: 5002, myBookName: "빅데이터 용어", myCreateDate: Date().GetCurrentTime()),
+    voca(bookId: 5003, myBookName: "VR 용어", myCreateDate: Date().GetCurrentTime()),
+    voca(bookId: 5004, myBookName: "국어사전", myCreateDate: Date().GetCurrentTime()),
+    voca(bookId: 5005, myBookName: "영어사전", myCreateDate: Date().GetCurrentTime())
+]
+
+
+let correctRates : [correctRate] = [
+    correctRate(bookId: myBooks[0].bookId, total: 25, correct: 10, incorrect:20, rate: 45),
+    correctRate(bookId: myBooks[1].bookId, total: 25, correct: 10, incorrect:20, rate: 65),
+    correctRate(bookId: myBooks[2].bookId, total: 25, correct: 10, incorrect:20, rate: 78),
+    correctRate(bookId: myBooks[3].bookId, total: 25, correct: 10, incorrect:20, rate: 55),
+    correctRate(bookId: vocas[0].bookId, total: 25, correct: 10, incorrect:20, rate: 14),
+    correctRate(bookId: vocas[1].bookId, total: 25, correct: 10, incorrect:20, rate: 23),
+    correctRate(bookId: vocas[2].bookId, total: 25, correct: 10, incorrect:20, rate: 51),
+    correctRate(bookId: vocas[3].bookId, total: 25, correct: 10, incorrect:20, rate: 66),
+    correctRate(bookId: vocas[4].bookId, total: 25, correct: 10, incorrect:20, rate: 77)
+]
+
+var bookData: [(bookId: Int, bookName: String, rate: Double)] = []
+var vocaData: [(bookId: Int, bookName: String, rate: Double)] = []
