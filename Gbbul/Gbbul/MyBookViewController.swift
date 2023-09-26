@@ -76,7 +76,7 @@ class MyBookViewController: BaseViewController {
             make.leading.equalTo(view.safeAreaLayoutGuide.snp.leading).offset(constMargin.safeAreaLeftMargin.getMargin())
             make.trailing.equalTo(view.safeAreaLayoutGuide.snp.trailing).offset(-constMargin.safeAreaLeftMargin.getMargin())
             make.centerX.equalToSuperview()
-            make.height.equalToSuperview().multipliedBy(LayoutMultiplier.small.getScale())
+            make.height.equalToSuperview().multipliedBy(LayoutMultiplier.extraSmall.getScale())
         }
         
         textholderlabel.snp.makeConstraints { make in
