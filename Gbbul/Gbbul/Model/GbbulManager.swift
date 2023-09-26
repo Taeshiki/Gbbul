@@ -35,7 +35,7 @@ class GbbulManager {
         user.setValue(0, forKey: "level")
         saveContext()
     }
-    
+  
     func getUser() -> [User]? {
         let fetchRequest: NSFetchRequest<User> = User.fetchRequest()
         do {
@@ -46,7 +46,7 @@ class GbbulManager {
             return nil
         }
     }
-    
+  
     func saveContext() {
         if mainContext.hasChanges {
             do {
@@ -56,7 +56,6 @@ class GbbulManager {
             }
         }
     }
-    
     
     func createMyBook(name: String, id: Int){
         guard let myBookEntity = NSEntityDescription.entity(forEntityName: "MyBook", in: mainContext) else {
@@ -76,8 +75,7 @@ class GbbulManager {
         
         saveContext()
     }
-    
-    
+  
     func getBook() -> [MyBook]? {
         var bookList: [MyBook] = []
         
@@ -90,8 +88,6 @@ class GbbulManager {
         }
         return bookList
     }
-    
-    
 }
 
 
