@@ -9,16 +9,23 @@ import UIKit
 
 class StudyViewController: BaseViewController {
     
-    private lazy var titleLabel : UILabel = {
+    private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.setUpLabel(title: "단어장 학습하기", fontSize: .large)
         return label
     }()
     
-    private lazy var subTitleLabel : UILabel = {
+    private lazy var subTitleLabel: UILabel = {
         let label = UILabel()
         label.setUpLabel(title: "단어 뜻을 아시나요?", fontSize: .medium)
         return label
+    }()
+    
+    private lazy var vocaView: UIView = {
+       let view = UIView()
+        // 색깔 어떻게 할까..?? 버튼이랑 같은 느낌으로 갈까..
+        view.backgroundColor = Palette.pink.getColor()
+        return view
     }()
 
     override func viewDidLoad() {
@@ -26,6 +33,7 @@ class StudyViewController: BaseViewController {
         
         setupTitleLabel()
         setupSubTitleLabel()
+        setupVocaView()
     }
     
     func setupTitleLabel() {
@@ -43,6 +51,26 @@ class StudyViewController: BaseViewController {
         subTitleLabel.snp.makeConstraints { make in
             make.top.equalTo(titleLabel.snp.bottom).offset(constMargin.safeAreaTopMargin.getMargin())
             make.leading.equalTo(titleLabel.snp.leading)
+        }
+    }
+    
+    func setupVocaView() {
+        view.addSubview(vocaView)
+        
+        vocaView.snp.makeConstraints { make in
+            //?? 마진값 어떻게 할까용
+            make.top.equalTo(subTitleLabel.snp.bottom).offset(20)
+            make.leading.equalTo(titleLabel.snp.leading)
+            make.width.height.equalTo(view.frame.width - constMargin.safeAreaLeftMargin.getMargin() - constMargin.safeAreaRightMargin.getMargin())
+        }
+        
+        let vocaLabel = UILabel()
+        vocaLabel.setUpLabel(title: "테스트 중", fontSize: .medium)
+        
+        vocaView.addSubview(vocaLabel)
+        
+        vocaLabel.snp.makeConstraints { make in
+            make.centerX.centerY.equalToSuperview()
         }
     }
 }
