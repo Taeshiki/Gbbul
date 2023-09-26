@@ -25,6 +25,11 @@ class myVocaView: BaseViewController {
         return $0
     }(UILabel())
     
+    let learnButton: UIButton = {
+        $0.setUpButton(title: "학습하기")
+        return $0
+    }(UIButton())
+    
     let floatingButton: UIButton = {
         $0.setTitle("+", for: .normal)
         $0.backgroundColor = Palette.boldPink.getColor()
@@ -50,6 +55,7 @@ class myVocaView: BaseViewController {
         view.addSubview(floatingButton)
         view.addSubview(vocaTableView)
         view.addSubview(hiddenLabel)
+        view.addSubview(learnButton)
     }
     
     func setconstraints() {
@@ -68,12 +74,18 @@ class myVocaView: BaseViewController {
         vocaTableView.snp.makeConstraints {
             $0.top.equalTo(titleLabel.snp.bottom).offset(20)
             $0.left.right.equalToSuperview().offset(20)
-            $0.bottom.equalTo(floatingButton.snp.top).offset(-20)
+            $0.bottom.equalTo(learnButton.snp.top).offset(-20)
         }
         
         hiddenLabel.snp.makeConstraints {
             $0.top.equalTo(titleLabel.snp.bottom).offset(20)
             $0.left.right.equalToSuperview().offset(20)
+        }
+        
+        learnButton.snp.makeConstraints {
+            $0.bottom.equalTo(floatingButton.snp.top).offset(-20)
+            $0.width.equalTo(180)
+            $0.centerX.equalToSuperview()
         }
     }
     
@@ -92,12 +104,17 @@ class myVocaView: BaseViewController {
     
     func setButtonTarget() {
         floatingButton.addTarget(self, action: #selector(floatingButtonTapped), for: .touchUpInside)
+        learnButton.addTarget(self, action: #selector(learnButtonTapped), for: .touchUpInside)
     }
     
     @objc func floatingButtonTapped() {
         let vocaView2VC = myVocaView2()
         
         present(vocaView2VC, animated: true)
+    }
+    
+    @objc func learnButtonTapped() {
+        
     }
 }
 
@@ -120,7 +137,7 @@ extension myVocaView: UITableViewDataSource {
         return cell
     }
 }
-//
+
 //import SwiftUI
 //
 //#if DEBUG

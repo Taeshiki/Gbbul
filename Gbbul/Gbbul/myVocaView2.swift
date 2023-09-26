@@ -104,29 +104,29 @@ class myVocaView2: BaseViewController {
     }
 }
 
-import SwiftUI
-
-#if DEBUG
-extension UIViewController {
-    private struct Preview: UIViewControllerRepresentable {
-        let viewController: UIViewController
-
-        func makeUIViewController(context: Context) -> UIViewController {
-            return viewController
-        }
-
-        func updateUIViewController(_ uiViewController: UIViewController, context: Context) {
-        }
-    }
-
-    func toPreview() -> some View {
-        Preview(viewController: self)
-    }
-}
-#endif
-
-struct VCPreView:PreviewProvider {
-    static var previews: some View {
-        myVocaView2().toPreview()
-    }
-}
+//import SwiftUI
+//
+//#if DEBUG
+//extension UIViewController {
+//    private struct Preview: UIViewControllerRepresentable {
+//        let viewController: UIViewController
+//
+//        func makeUIViewController(context: Context) -> UIViewController {
+//            return viewController
+//        }
+//
+//        func updateUIViewController(_ uiViewController: UIViewController, context: Context) {
+//        }
+//    }
+//
+//    func toPreview() -> some View {
+//        Preview(viewController: self)
+//    }
+//}
+//#endif
+//
+//struct VCPreView:PreviewProvider {
+//    static var previews: some View {
+//        myVocaView2().toPreview()
+//    }
+//}
