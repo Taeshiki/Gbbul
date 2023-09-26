@@ -39,6 +39,15 @@ extension UITextField{
         self.leftViewMode = .always
     }
 }
+extension UITableView{
+    func setUpTableView(){
+        self.layer.cornerRadius = 10
+        self.layer.masksToBounds = true
+        self.layer.borderWidth = 1.0
+        self.layer.borderColor = Palette.boldPink.getColor().cgColor
+    }
+}
+
 
 extension UIViewController {
     func showAlert(title: String?, message: String?, buttonTitle: String = "OK", completion: (() -> Void)? = nil) {
