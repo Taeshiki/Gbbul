@@ -25,7 +25,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             window.makeKeyAndVisible()
         }else{
             let window = UIWindow(windowScene: windowScene)
-            window.rootViewController = SignInViewController()
+            window.rootViewController = SignInViewController(manager: GbbulManager())
             self.window = window
             window.makeKeyAndVisible()
         }
@@ -37,7 +37,7 @@ extension UITabBarController {
     func setupTabBarController() {
         let bookViewController = BookViewController()
         let myBookViewController = MyBookViewController()
-        let myPageViewController = MyPageViewController()
+        let myPageViewController = MyPageViewController(manager: GbbulManager())
         
         let bookIcon = UIImage(systemName: "book.circle")
         bookViewController.tabBarItem = UITabBarItem(title: "단어 공유소", image: bookIcon, tag: 0)

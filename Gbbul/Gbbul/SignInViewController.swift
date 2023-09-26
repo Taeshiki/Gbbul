@@ -9,19 +9,23 @@ import UIKit
 import SnapKit
 
 enum LayoutMultiplier: CGFloat {
-    case small
+    case extraSmall
+    case quarter
     case medium
+    case half
     func getScale() -> Double {
         switch self{
-        case .small:
+        case .extraSmall:
             return 0.05
+        case .quarter:
+            return 0.25
+        case .half:
+            return 0.5
         case .medium:
             return 0.6
         }
     }
 }
-
-
 class SignInViewController: BaseViewController {
     private lazy var titleLabel : UILabel = {
         let titleLabel = UILabel()
@@ -46,7 +50,16 @@ class SignInViewController: BaseViewController {
         return confirmButton
     }()
     
-    private var manager = GbbulManager()
+    private var manager : GbbulManager!
+    init(manager : GbbulManager)
+    {
+        self.manager = manager
+        super.init(nibName: nil, bundle: nil)
+    }
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        self.manager = GbbulManager()
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -70,12 +83,12 @@ class SignInViewController: BaseViewController {
             $0.top.equalTo(nicknameLabel.snp.bottom).offset(10)
             $0.leading.equalTo(titleLabel.snp.leading)
             $0.trailing.equalTo(view.safeAreaLayoutGuide.snp.trailing).offset(-constMargin.safeAreaLeftMargin.getMargin())
-            $0.height.equalToSuperview().multipliedBy(LayoutMultiplier.small.getScale())
+            $0.height.equalToSuperview().multipliedBy(LayoutMultiplier.extraSmall.getScale())
         }
         confirmButton.snp.makeConstraints {
             $0.centerX.equalTo(inputTextField)
             $0.top.equalTo(inputTextField.snp.bottom).offset(20)
-            $0.width.equalTo(inputTextField.snp.width).multipliedBy(LayoutMultiplier.medium.getScale())
+            $0.width.equalTo(inputTextField.snp.width).multipliedBy(LayoutMultiplier.half.getScale())
             $0.height.equalTo(inputTextField.snp.height)
         }
     }
@@ -92,7 +105,6 @@ extension SignInViewController{
             let tabBarController = UITabBarController()
             tabBarController.setupTabBarController()
             present(tabBarController, animated: true)
-            
             manager.createUser(name: inputTextFieldText)
         }
     }
