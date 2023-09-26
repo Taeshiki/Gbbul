@@ -18,9 +18,11 @@ class GbbulManager {
         }
         return container
     }()
+    
     var mainContext: NSManagedObjectContext {
         return persistentContainer.viewContext
     }
+    
     func createUser(name : String)
     {
         guard let userEntity = NSEntityDescription.entity(forEntityName: "User", in: mainContext) else {
@@ -32,6 +34,7 @@ class GbbulManager {
         user.setValue(0, forKey: "level")
         saveContext()
     }
+    
     func getUser() -> [User]? {
         let fetchRequest: NSFetchRequest<User> = User.fetchRequest()
         do {
@@ -42,6 +45,7 @@ class GbbulManager {
             return nil
         }
     }
+    
     func saveContext() {
         if mainContext.hasChanges {
             do {

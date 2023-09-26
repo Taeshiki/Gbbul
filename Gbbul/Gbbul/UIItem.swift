@@ -27,6 +27,7 @@ extension UILabel {
         self.textColor = titleColor
     }
 }
+
 extension UITextField{
     func setUpTextField(){
         self.layer.cornerRadius = 10
@@ -48,7 +49,8 @@ extension UIViewController {
         present(alert, animated: true, completion: nil)
     }
 }
-extension Date{
+
+extension Date {
     func GetCurrentTime() -> String{
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
@@ -77,16 +79,19 @@ enum Palette {
     }
     
 }
+
 enum LabelFontSize: CGFloat {
     case small = 10
     case medium = 18
     case large = 25
 }
+
 enum constMargin {
     case safeAreaTopMargin
     case safeAreaLeftMargin
     case safeAreaRightMargin
     case safeAreaBottomMargin
+    
     func getMargin() -> Double {
         switch self {
         case .safeAreaTopMargin:
