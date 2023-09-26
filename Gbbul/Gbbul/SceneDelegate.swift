@@ -16,7 +16,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         
         let isSkip = UserDefaults.standard.bool(forKey: "isUserLoggedIn")
-        if isSkip == true{
+        if isSkip{
             let window = UIWindow(windowScene: windowScene)
             let tabBarController = UITabBarController()
             tabBarController.setupTabBarController()
