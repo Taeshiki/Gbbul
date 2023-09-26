@@ -99,8 +99,8 @@ class MyPageViewController: BaseViewController {
     private func configUI(){
         [titleLabel,nicknameLabel,levelLabel,ratingView,nextLabel,myVocaLabel,nextLabel,myBookLabel,bookTableView,vocaTableView].forEach(view.addSubview)
         titleLabel.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(constMargin.safeAreaTopMargin.getMargin())
-            $0.leading.equalTo(view.safeAreaLayoutGuide.snp.leading).offset(constMargin.safeAreaLeftMargin.getMargin())
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(ConstMargin.safeAreaTopMargin.getMargin())
+            $0.leading.equalTo(view.safeAreaLayoutGuide.snp.leading).offset(ConstMargin.safeAreaLeftMargin.getMargin())
         }
         nicknameLabel.snp.makeConstraints {
             $0.top.equalTo(titleLabel.snp.bottom).offset(20)
@@ -112,7 +112,7 @@ class MyPageViewController: BaseViewController {
         }
         nextLabel.snp.makeConstraints{
             $0.top.equalTo(levelLabel.snp.bottom).offset(5)
-            $0.trailing.equalTo(view.safeAreaLayoutGuide.snp.trailing).offset(-constMargin.safeAreaRightMargin.getMargin())
+            $0.trailing.equalTo(view.safeAreaLayoutGuide.snp.trailing).offset(-ConstMargin.safeAreaRightMargin.getMargin())
         }
         ratingView.snp.makeConstraints {
             $0.top.equalTo(nextLabel.snp.bottom).offset(5)

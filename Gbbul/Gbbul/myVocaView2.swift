@@ -59,32 +59,32 @@ class myVocaView2: BaseViewController {
     
     func setConstraints() {
         titleLabel.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(constMargin.safeAreaTopMargin.getMargin())
-            $0.left.equalTo(view.safeAreaLayoutGuide.snp.left).offset(constMargin.safeAreaLeftMargin.getMargin())
-            $0.right.equalTo(view.safeAreaLayoutGuide.snp.right).offset(constMargin.safeAreaRightMargin.getMargin())
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(ConstMargin.safeAreaTopMargin.getMargin())
+            $0.left.equalTo(view.safeAreaLayoutGuide.snp.left).offset(ConstMargin.safeAreaLeftMargin.getMargin())
+            $0.right.equalTo(view.safeAreaLayoutGuide.snp.right).offset(ConstMargin.safeAreaRightMargin.getMargin())
         }
         
         vocaNameLabel.snp.makeConstraints {
             $0.top.equalTo(titleLabel.snp.bottom).offset(20)
-            $0.left.equalTo(view.safeAreaLayoutGuide.snp.left).offset(constMargin.safeAreaLeftMargin.getMargin())
+            $0.left.equalTo(view.safeAreaLayoutGuide.snp.left).offset(ConstMargin.safeAreaLeftMargin.getMargin())
         }
         
         vocaNameTextField.snp.makeConstraints {
             $0.top.equalTo(vocaNameLabel.snp.bottom).offset(20)
-            $0.left.equalTo(view.safeAreaLayoutGuide.snp.left).offset(constMargin.safeAreaLeftMargin.getMargin())
-            $0.right.equalTo(view.safeAreaLayoutGuide.snp.right).offset(-constMargin.safeAreaRightMargin.getMargin())
+            $0.left.equalTo(view.safeAreaLayoutGuide.snp.left).offset(ConstMargin.safeAreaLeftMargin.getMargin())
+            $0.right.equalTo(view.safeAreaLayoutGuide.snp.right).offset(-ConstMargin.safeAreaRightMargin.getMargin())
             $0.height.equalTo(40)
         }
         
         vocaMeanLabel.snp.makeConstraints {
             $0.top.equalTo(vocaNameTextField.snp.bottom).offset(20)
-            $0.left.equalTo(view.safeAreaLayoutGuide.snp.left).offset(constMargin.safeAreaLeftMargin.getMargin())
+            $0.left.equalTo(view.safeAreaLayoutGuide.snp.left).offset(ConstMargin.safeAreaLeftMargin.getMargin())
         }
         
         vocaMeanTextField.snp.makeConstraints {
             $0.top.equalTo(vocaMeanLabel.snp.bottom).offset(20)
-            $0.left.equalTo(view.safeAreaLayoutGuide.snp.left).offset(constMargin.safeAreaLeftMargin.getMargin())
-            $0.right.equalTo(view.safeAreaLayoutGuide.snp.right).offset(-constMargin.safeAreaRightMargin.getMargin())
+            $0.left.equalTo(view.safeAreaLayoutGuide.snp.left).offset(ConstMargin.safeAreaLeftMargin.getMargin())
+            $0.right.equalTo(view.safeAreaLayoutGuide.snp.right).offset(-ConstMargin.safeAreaRightMargin.getMargin())
             $0.height.equalTo(40)
         }
         

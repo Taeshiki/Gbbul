@@ -40,8 +40,8 @@ class StudyViewController: BaseViewController {
         view.addSubview(titleLabel)
         
         titleLabel.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(constMargin.safeAreaTopMargin.getMargin())
-            make.leading.equalToSuperview().offset(constMargin.safeAreaLeftMargin.getMargin())
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(ConstMargin.safeAreaTopMargin.getMargin())
+            make.leading.equalToSuperview().offset(ConstMargin.safeAreaLeftMargin.getMargin())
         }
     }
     
@@ -49,7 +49,7 @@ class StudyViewController: BaseViewController {
         view.addSubview(subTitleLabel)
         
         subTitleLabel.snp.makeConstraints { make in
-            make.top.equalTo(titleLabel.snp.bottom).offset(constMargin.safeAreaTopMargin.getMargin())
+            make.top.equalTo(titleLabel.snp.bottom).offset(ConstMargin.safeAreaTopMargin.getMargin())
             make.leading.equalTo(titleLabel.snp.leading)
         }
     }
@@ -61,7 +61,7 @@ class StudyViewController: BaseViewController {
             //?? 마진값 어떻게 할까용
             make.top.equalTo(subTitleLabel.snp.bottom).offset(20)
             make.leading.equalTo(titleLabel.snp.leading)
-            make.width.height.equalTo(view.frame.width - constMargin.safeAreaLeftMargin.getMargin() - constMargin.safeAreaRightMargin.getMargin())
+            make.width.height.equalTo(view.frame.width - ConstMargin.safeAreaLeftMargin.getMargin() - ConstMargin.safeAreaRightMargin.getMargin())
         }
         
         let vocaLabel = UILabel()

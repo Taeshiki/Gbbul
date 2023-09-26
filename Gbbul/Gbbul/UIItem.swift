@@ -94,7 +94,7 @@ enum LabelFontSize: CGFloat {
     case large = 25
 }
 
-enum constMargin {
+enum ConstMargin {
     case safeAreaTopMargin
     case safeAreaLeftMargin
     case safeAreaRightMargin

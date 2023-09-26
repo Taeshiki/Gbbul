@@ -67,28 +67,28 @@ class MyBookViewController: BaseViewController {
     
     func makeConstraints(){
         titleLabel.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(constMargin.safeAreaTopMargin.getMargin())
-            make.leading.equalTo(view.safeAreaLayoutGuide.snp.leading).offset(constMargin.safeAreaLeftMargin.getMargin())
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(ConstMargin.safeAreaTopMargin.getMargin())
+            make.leading.equalTo(view.safeAreaLayoutGuide.snp.leading).offset(ConstMargin.safeAreaLeftMargin.getMargin())
         }
         
         addBookButton.snp.makeConstraints { make in
-            make.top.equalTo(titleLabel.snp.bottom).offset(constMargin.safeAreaTopMargin.getMargin())
-            make.leading.equalTo(view.safeAreaLayoutGuide.snp.leading).offset(constMargin.safeAreaLeftMargin.getMargin())
-            make.trailing.equalTo(view.safeAreaLayoutGuide.snp.trailing).offset(-constMargin.safeAreaLeftMargin.getMargin())
+            make.top.equalTo(titleLabel.snp.bottom).offset(ConstMargin.safeAreaTopMargin.getMargin())
+            make.leading.equalTo(view.safeAreaLayoutGuide.snp.leading).offset(ConstMargin.safeAreaLeftMargin.getMargin())
+            make.trailing.equalTo(view.safeAreaLayoutGuide.snp.trailing).offset(-ConstMargin.safeAreaLeftMargin.getMargin())
             make.centerX.equalToSuperview()
             make.height.equalToSuperview().multipliedBy(LayoutMultiplier.extraSmall.getScale())
         }
         
         textholderlabel.snp.makeConstraints { make in
             make.top.equalTo(addBookButton.snp.bottom).offset(40)
-            make.leading.equalTo(view.safeAreaLayoutGuide.snp.leading).offset(constMargin.safeAreaLeftMargin.getMargin())
+            make.leading.equalTo(view.safeAreaLayoutGuide.snp.leading).offset(ConstMargin.safeAreaLeftMargin.getMargin())
         }
         
         tableView.snp.makeConstraints { make in
-            make.top.equalTo(addBookButton.snp.bottom).offset(constMargin.safeAreaTopMargin.getMargin())
-            make.leading.equalTo(view.safeAreaLayoutGuide.snp.leading).offset(constMargin.safeAreaLeftMargin.getMargin())
-            make.trailing.equalTo(view.safeAreaLayoutGuide.snp.trailing).offset(-constMargin.safeAreaRightMargin.getMargin())
-            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-constMargin.safeAreaBottomMargin.getMargin())
+            make.top.equalTo(addBookButton.snp.bottom).offset(ConstMargin.safeAreaTopMargin.getMargin())
+            make.leading.equalTo(view.safeAreaLayoutGuide.snp.leading).offset(ConstMargin.safeAreaLeftMargin.getMargin())
+            make.trailing.equalTo(view.safeAreaLayoutGuide.snp.trailing).offset(-ConstMargin.safeAreaRightMargin.getMargin())
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-ConstMargin.safeAreaBottomMargin.getMargin())
         }
         
         

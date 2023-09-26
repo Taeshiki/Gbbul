@@ -60,9 +60,9 @@ class myVocaView: BaseViewController {
     
     func setconstraints() {
         titleLabel.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(constMargin.safeAreaTopMargin.getMargin())
-            $0.left.equalTo(view.safeAreaLayoutGuide.snp.left).offset(constMargin.safeAreaLeftMargin.getMargin())
-            $0.right.equalTo(view.safeAreaLayoutGuide.snp.right).offset(constMargin.safeAreaRightMargin.getMargin())
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(ConstMargin.safeAreaTopMargin.getMargin())
+            $0.left.equalTo(view.safeAreaLayoutGuide.snp.left).offset(ConstMargin.safeAreaLeftMargin.getMargin())
+            $0.right.equalTo(view.safeAreaLayoutGuide.snp.right).offset(ConstMargin.safeAreaRightMargin.getMargin())
         }
         
         floatingButton.snp.makeConstraints {

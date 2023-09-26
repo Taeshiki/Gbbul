@@ -72,8 +72,8 @@ class SignInViewController: BaseViewController {
     private func configUI(){
         [titleLabel,nicknameLabel,inputTextField,confirmButton].forEach(view.addSubview)
         titleLabel.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(constMargin.safeAreaTopMargin.getMargin())
-            $0.leading.equalTo(view.safeAreaLayoutGuide.snp.leading).offset(constMargin.safeAreaLeftMargin.getMargin())
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(ConstMargin.safeAreaTopMargin.getMargin())
+            $0.leading.equalTo(view.safeAreaLayoutGuide.snp.leading).offset(ConstMargin.safeAreaLeftMargin.getMargin())
         }
         nicknameLabel.snp.makeConstraints {
             $0.leading.equalTo(titleLabel.snp.leading)
@@ -82,7 +82,7 @@ class SignInViewController: BaseViewController {
         inputTextField.snp.makeConstraints {
             $0.top.equalTo(nicknameLabel.snp.bottom).offset(10)
             $0.leading.equalTo(titleLabel.snp.leading)
-            $0.trailing.equalTo(view.safeAreaLayoutGuide.snp.trailing).offset(-constMargin.safeAreaLeftMargin.getMargin())
+            $0.trailing.equalTo(view.safeAreaLayoutGuide.snp.trailing).offset(-ConstMargin.safeAreaLeftMargin.getMargin())
             $0.height.equalToSuperview().multipliedBy(LayoutMultiplier.extraSmall.getScale())
         }
         confirmButton.snp.makeConstraints {

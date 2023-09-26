@@ -40,17 +40,17 @@ class BookInformationViewController: UIViewController {
         
         // 제약 조건 - 라벨 위에 테이블 뷰 추가
         bookViewTitleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        bookViewTitleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: constMargin.safeAreaTopMargin.getMargin()).isActive = true
+        bookViewTitleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: ConstMargin.safeAreaTopMargin.getMargin()).isActive = true
         
         // 테이블 뷰 제약 조건 설정
         view.addSubview(tableView)
         tableView.topAnchor.constraint(equalTo: bookViewTitleLabel.bottomAnchor, constant: 20).isActive = true
-        tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: constMargin.safeAreaLeftMargin.getMargin()).isActive = true
-        tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -constMargin.safeAreaRightMargin.getMargin()).isActive = true
+        tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: ConstMargin.safeAreaLeftMargin.getMargin()).isActive = true
+        tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -ConstMargin.safeAreaRightMargin.getMargin()).isActive = true
         tableView.bottomAnchor.constraint(equalTo: studyButton.topAnchor, constant: -20).isActive = true
         // 제약 조건
         bookViewTitleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        bookViewTitleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: constMargin.safeAreaTopMargin.getMargin()).isActive = true
+        bookViewTitleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: ConstMargin.safeAreaTopMargin.getMargin()).isActive = true
         
         // 버튼 설정
         studyButton.setUpButton(title: "학습하기")
@@ -60,7 +60,7 @@ class BookInformationViewController: UIViewController {
         studyButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         studyButton.widthAnchor.constraint(equalToConstant: 100).isActive = true
         studyButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
-        studyButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -constMargin.safeAreaBottomMargin.getMargin()).isActive = true
+        studyButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -ConstMargin.safeAreaBottomMargin.getMargin()).isActive = true
         
         
         // 라벨 생성

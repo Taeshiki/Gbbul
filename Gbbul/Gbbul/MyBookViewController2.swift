@@ -73,26 +73,26 @@ class MyBookViewController2: BaseViewController {
     
     func makeConstraints(){
         titleLabel.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(constMargin.safeAreaTopMargin.getMargin())
-            make.leading.equalTo(view.safeAreaLayoutGuide.snp.leading).offset(constMargin.safeAreaLeftMargin.getMargin())
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(ConstMargin.safeAreaTopMargin.getMargin())
+            make.leading.equalTo(view.safeAreaLayoutGuide.snp.leading).offset(ConstMargin.safeAreaLeftMargin.getMargin())
         }
         
         holderLabel.snp.makeConstraints { make in
             make.top.equalTo(titleLabel.snp.bottom).offset(40)
-            make.leading.equalTo(view.safeAreaLayoutGuide.snp.leading).offset(constMargin.safeAreaLeftMargin.getMargin())
+            make.leading.equalTo(view.safeAreaLayoutGuide.snp.leading).offset(ConstMargin.safeAreaLeftMargin.getMargin())
         }
         
         textField.snp.makeConstraints { make in
             make.top.equalTo(holderLabel.snp.bottom).offset(10)
-            make.leading.equalTo(view.safeAreaLayoutGuide.snp.leading).offset(constMargin.safeAreaLeftMargin.getMargin())
-            make.trailing.equalTo(view.safeAreaLayoutGuide.snp.trailing).offset(-constMargin.safeAreaRightMargin.getMargin())
+            make.leading.equalTo(view.safeAreaLayoutGuide.snp.leading).offset(ConstMargin.safeAreaLeftMargin.getMargin())
+            make.trailing.equalTo(view.safeAreaLayoutGuide.snp.trailing).offset(-ConstMargin.safeAreaRightMargin.getMargin())
             make.height.equalToSuperview().multipliedBy(LayoutMultiplier.extraSmall.getScale())
         }
         
         addButton.snp.makeConstraints { make in
-            make.top.equalTo(textField.snp.bottom).offset(constMargin.safeAreaTopMargin.getMargin())
-            make.leading.equalTo(view.safeAreaLayoutGuide.snp.leading).offset(constMargin.safeAreaLeftMargin.getMargin())
-            make.trailing.equalTo(view.safeAreaLayoutGuide.snp.trailing).offset(-constMargin.safeAreaLeftMargin.getMargin())
+            make.top.equalTo(textField.snp.bottom).offset(ConstMargin.safeAreaTopMargin.getMargin())
+            make.leading.equalTo(view.safeAreaLayoutGuide.snp.leading).offset(ConstMargin.safeAreaLeftMargin.getMargin())
+            make.trailing.equalTo(view.safeAreaLayoutGuide.snp.trailing).offset(-ConstMargin.safeAreaLeftMargin.getMargin())
             make.centerX.equalToSuperview()
             make.height.equalToSuperview().multipliedBy(LayoutMultiplier.extraSmall.getScale())
         }
