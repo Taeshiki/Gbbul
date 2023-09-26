@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0A905DF52AC28D9A001364D1 /* StudyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A905DF42AC28D9A001364D1 /* StudyViewController.swift */; };
 		26975CCA2AC16ACA0052D5D3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26975CC92AC16ACA0052D5D3 /* AppDelegate.swift */; };
 		26975CCC2AC16ACA0052D5D3 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26975CCB2AC16ACA0052D5D3 /* SceneDelegate.swift */; };
 		26975CD32AC16ACB0052D5D3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 26975CD22AC16ACB0052D5D3 /* Assets.xcassets */; };
@@ -22,6 +23,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0A905DF42AC28D9A001364D1 /* StudyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudyViewController.swift; sourceTree = "<group>"; };
 		26975CC62AC16ACA0052D5D3 /* Gbbul.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Gbbul.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		26975CC92AC16ACA0052D5D3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		26975CCB2AC16ACA0052D5D3 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -75,6 +77,7 @@
 				26975CDF2AC16B300052D5D3 /* MyBookViewController.swift */,
 				26975CDD2AC16B300052D5D3 /* MyPageViewController.swift */,
 				26975CDE2AC16B300052D5D3 /* SignInViewController.swift */,
+				0A905DF42AC28D9A001364D1 /* StudyViewController.swift */,
 				26EB19752AC198F600A1B78B /* UIItem.swift */,
 				26975CD22AC16ACB0052D5D3 /* Assets.xcassets */,
 				26975CD42AC16ACB0052D5D3 /* LaunchScreen.storyboard */,
@@ -168,6 +171,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0A905DF52AC28D9A001364D1 /* StudyViewController.swift in Sources */,
 				26975CE32AC16B300052D5D3 /* MyBookViewController.swift in Sources */,
 				26975CCA2AC16ACA0052D5D3 /* AppDelegate.swift in Sources */,
 				26975CE42AC16B300052D5D3 /* BookViewController.swift in Sources */,
