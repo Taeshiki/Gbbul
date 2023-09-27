@@ -122,4 +122,10 @@ class GbbulManager {
             return nil
         }
     }
+    
+    func deleteMyVoca(myVoca: MyVoca) {
+            mainContext.delete(myVoca)
+            saveContext()
+        }
+
 }

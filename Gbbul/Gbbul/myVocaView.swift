@@ -139,7 +139,19 @@ class myVocaView: BaseViewController {
 }
 
 extension myVocaView: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return true
+    }
     
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            let myVocaToDelete = vocabularyData[indexPath.row]
+            gbbulManager.deleteMyVoca(myVoca: myVocaToDelete)
+            
+            vocabularyData.remove(at: indexPath.row)
+            tableView.deleteRows(at: [indexPath], with: .automatic)
+        }
+    }
 }
 
 extension myVocaView: UITableViewDataSource {
