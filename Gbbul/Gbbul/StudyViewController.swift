@@ -89,6 +89,7 @@ extension StudyViewController {
     
     // MARK: 매니저에서 불러오는 함수 지금 틀렸으니까 나중에 수정 반드시 할 것!!!
     func getTestVocaList() {
+        testVocaList = []
         guard let bookId = bookId else { return }
         
         // MyVoca
@@ -108,6 +109,11 @@ extension StudyViewController {
                     testVocaList.append(TestVoca(name: name, mean: mean))
                 }
             }
+        }
+        
+        for i in 0..<testVocaList.count {
+            let newIndex = Int.random(in: i..<testVocaList.count)
+            testVocaList.swapAt(i, newIndex)
         }
     }
 }
