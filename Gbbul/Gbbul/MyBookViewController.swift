@@ -117,18 +117,12 @@ class MyBookViewController: BaseViewController {
     }
     
     
-    
 }
 
 
 // MARK: - UITableViewDelegate
 
 extension MyBookViewController: UITableViewDelegate {
-    
-    //    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-    //        return 60
-    //    }
-    //
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
@@ -137,13 +131,23 @@ extension MyBookViewController: UITableViewDelegate {
             
             vocaView.selectedBookTitle = selectedBook.myBookName
             vocaView.selectedBookId = selectedBook.bookId
-
+            
             self.navigationController?.pushViewController(vocaView, animated: true)
         }
     }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            if let book = manager.getBook()?[indexPath.row] {
+                manager.deleteWordsInBook(book)
+                manager.deleteMyBook(book)
+            }
+            tableView.deleteRows(at: [indexPath], with: .fade)
+            tableView.reloadData()
+        }
+    }
+    
 }
-
-
 
 
 // MARK: - UITableViewDataSource
