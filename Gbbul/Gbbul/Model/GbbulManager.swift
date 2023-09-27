@@ -140,7 +140,10 @@ class GbbulManager {
         }
     }
     
-    
+    func deleteMyVoca(myVoca: MyVoca) {
+        mainContext.delete(myVoca)
+        saveContext()
+    }
 
     func getMyVoca(by bookId: Int64) -> [MyVoca]? {
         let fetchRequest: NSFetchRequest<MyVoca> = MyVoca.fetchRequest()

@@ -154,7 +154,54 @@ class myVocaView: BaseViewController {
 }
 
 extension myVocaView: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return true
+    }
     
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            let myVocaToDelete = vocabularyData[indexPath.row]
+            gbbulManager.deleteMyVoca(myVoca: myVocaToDelete)
+            
+            vocabularyData.remove(at: indexPath.row)
+            tableView.deleteRows(at: [indexPath], with: .automatic)
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let selectedVoca = vocabularyData[indexPath.row]
+        
+        let alertController = UIAlertController(title: "단어 수정", message: "단어와 의미를 수정해 주세요.", preferredStyle: .alert)
+        alertController.view.tintColor = Palette.purple.getColor()
+        
+        alertController.addTextField { (textField) in
+            textField.text = selectedVoca.myVocaName
+            textField.placeholder = "단어"
+        }
+        alertController.addTextField { (textField) in
+            textField.text = selectedVoca.myVocaMean
+            textField.placeholder = "의미"
+        }
+        
+        let confirmAction = UIAlertAction(title: "확인", style: .default) { _ in
+            guard let newName = alertController.textFields?[0].text,
+                  let newMean = alertController.textFields?[1].text else {
+                return
+            }
+            
+            selectedVoca.setValue(newName, forKey: "myVocaName")
+            selectedVoca.setValue(newMean, forKey: "myVocaMean")
+            self.gbbulManager.saveContext()
+            self.vocaTableView.reloadData()
+        }
+        
+        let cancelAction = UIAlertAction(title: "취소", style: .cancel, handler: nil)
+        
+        alertController.addAction(confirmAction)
+        alertController.addAction(cancelAction)
+        
+        self.present(alertController, animated: true, completion: nil)
+    }
 }
 
 extension myVocaView: UITableViewDataSource {
