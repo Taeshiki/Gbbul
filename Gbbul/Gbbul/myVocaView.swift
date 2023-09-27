@@ -11,10 +11,13 @@ import CoreData
 
 class myVocaView: BaseViewController {
 
-    let vocabularyData: [(word: String, meaning: String)] = []
+    var vocabularyData: [MyVoca] = []
+    var gbbulManager = GbbulManager()
+    var selectedBookTitle: String?
+    var selectedBookId: Int64?
     
     let titleLabel: UILabel = {
-        $0.setUpLabel(title: "비 전공자를 위한 IT 단어장", fontSize: .large)
+        $0.setUpLabel(title: "", fontSize: .large)
         return $0
     }(UILabel())
     
@@ -30,7 +33,7 @@ class myVocaView: BaseViewController {
     
     let floatingButton: UIButton = {
         $0.setTitle("+", for: .normal)
-        $0.backgroundColor = Palette.boldPink.getColor()
+        $0.backgroundColor = Palette.pink.getColor()
         $0.layer.cornerRadius = 30
         $0.clipsToBounds = true
         return $0
@@ -50,12 +53,21 @@ class myVocaView: BaseViewController {
         setButtonTarget()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        setTableView()
+        vocabularyData = gbbulManager.getVoca(by: selectedBookId!) ?? []
+        vocaTableView.reloadData()
+    }
+    
     func setUI() {
         view.addSubview(titleLabel)
         view.addSubview(floatingButton)
         view.addSubview(vocaTableView)
         view.addSubview(hiddenLabel)
         view.addSubview(learnButton)
+        
+        titleLabel.text = selectedBookTitle
     }
     
     func setconstraints() {
@@ -91,6 +103,10 @@ class myVocaView: BaseViewController {
     }
     
     func setTableView() {
+        if let bookId = selectedBookId {
+            vocabularyData = gbbulManager.getVoca(by: bookId) ?? []
+        }
+        
         vocaTableView.delegate = self
         vocaTableView.dataSource = self
         
@@ -113,6 +129,7 @@ class myVocaView: BaseViewController {
     @objc func floatingButtonTapped() {
         let vocaView2 = myVocaView2()
         
+        vocaView2.selectedBookId = selectedBookId
         self.navigationController?.pushViewController(vocaView2, animated: true)
     }
     
@@ -133,10 +150,10 @@ extension myVocaView: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "Cell")
         
-        let wordAndMeaning = vocabularyData[indexPath.row]
-        cell.textLabel?.text = wordAndMeaning.word
-        cell.detailTextLabel?.text = wordAndMeaning.meaning
-        
+        let myVoca = vocabularyData[indexPath.row]
+        cell.textLabel?.text = myVoca.myVocaName
+        cell.detailTextLabel?.text = myVoca.myVocaMean
+                
         return cell
     }
 }

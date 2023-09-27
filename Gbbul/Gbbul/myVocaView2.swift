@@ -11,6 +11,9 @@ import CoreData
 
 class myVocaView2: BaseViewController {
 
+    var gbbulManager = GbbulManager()
+    var selectedBookId: Int64?
+
     let titleLabel: UILabel = {
         $0.setUpLabel(title: "단어 추가하기", fontSize: .large)
         return $0
@@ -101,6 +104,19 @@ class myVocaView2: BaseViewController {
     }
     
     @objc func addButtonTapped() {
-       
+        guard let vocaName = vocaNameTextField.text, !vocaName.isEmpty,
+              let vocaMean = vocaMeanTextField.text, !vocaMean.isEmpty else {
+            return
+        }
+
+        let bookId: Int64 = selectedBookId!
+
+        gbbulManager.createMyVoca(bookId: bookId, vocaName: vocaName, vocaMean: vocaMean)
+        
+        vocaNameTextField.text = ""
+        vocaMeanTextField.text = ""
+        
+        navigationController?.popViewController(animated: true)
     }
+
 }
