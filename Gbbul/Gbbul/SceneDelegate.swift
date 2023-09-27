@@ -48,7 +48,11 @@ extension UITabBarController {
         let myPageIcon = UIImage(systemName: "person.circle")
         myPageViewController.tabBarItem = UITabBarItem(title: "마이페이지", image: myPageIcon, tag: 2)
         
-        viewControllers = [bookViewController, myBookViewController, myPageViewController]
+        let bookNavController = UINavigationController(rootViewController: bookViewController)
+        let myBookNavController = UINavigationController(rootViewController: myBookViewController)
+        let myPageNavController = UINavigationController(rootViewController: myPageViewController)
+
+        viewControllers = [bookNavController, myBookNavController, myPageNavController]
         tabBar.tintColor = .black
         
         self.modalPresentationStyle = .fullScreen
