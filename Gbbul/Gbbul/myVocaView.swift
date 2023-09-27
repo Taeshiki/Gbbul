@@ -7,13 +7,11 @@
 
 import UIKit
 import SnapKit
+import CoreData
 
 class myVocaView: BaseViewController {
 
-    let vocabularyData: [(word: String, meaning: String)] = [
-        ("Apple", "사과"),
-        ("Banana", "바나나"),
-    ]
+    let vocabularyData: [(word: String, meaning: String)] = []
     
     let titleLabel: UILabel = {
         $0.setUpLabel(title: "비 전공자를 위한 IT 단어장", fontSize: .large)
@@ -39,6 +37,7 @@ class myVocaView: BaseViewController {
     }(UIButton(type: .custom))
     
     let vocaTableView: UITableView = {
+        $0.setUpTableView()
         return $0
     }(UITableView())
     
@@ -48,6 +47,7 @@ class myVocaView: BaseViewController {
         setUI()
         setconstraints()
         setTableView()
+        setButtonTarget()
     }
     
     func setUI() {
@@ -73,7 +73,8 @@ class myVocaView: BaseViewController {
         
         vocaTableView.snp.makeConstraints {
             $0.top.equalTo(titleLabel.snp.bottom).offset(20)
-            $0.left.right.equalToSuperview().offset(20)
+            $0.left.equalToSuperview().offset(20)
+            $0.right.equalToSuperview().offset(-20)
             $0.bottom.equalTo(learnButton.snp.top).offset(-20)
         }
         
@@ -96,9 +97,11 @@ class myVocaView: BaseViewController {
         if vocabularyData.isEmpty {
             hiddenLabel.isHidden = false
             vocaTableView.isHidden = true
+            learnButton.isHidden = true
         } else {
             hiddenLabel.isHidden = true
             vocaTableView.isHidden = false
+            learnButton.isHidden = false
         }
     }
     
@@ -108,9 +111,9 @@ class myVocaView: BaseViewController {
     }
     
     @objc func floatingButtonTapped() {
-        let vocaView2VC = myVocaView2()
+        let vocaView2 = myVocaView2()
         
-        present(vocaView2VC, animated: true)
+        self.navigationController?.pushViewController(vocaView2, animated: true)
     }
     
     @objc func learnButtonTapped() {
@@ -137,30 +140,3 @@ extension myVocaView: UITableViewDataSource {
         return cell
     }
 }
-
-//import SwiftUI
-//
-//#if DEBUG
-//extension UIViewController {
-//    private struct Preview: UIViewControllerRepresentable {
-//        let viewController: UIViewController
-//
-//        func makeUIViewController(context: Context) -> UIViewController {
-//            return viewController
-//        }
-//
-//        func updateUIViewController(_ uiViewController: UIViewController, context: Context) {
-//        }
-//    }
-//
-//    func toPreview() -> some View {
-//        Preview(viewController: self)
-//    }
-//}
-//#endif
-//
-//struct VCPreView:PreviewProvider {
-//    static var previews: some View {
-//        myVocaView().toPreview()
-//    }
-//}

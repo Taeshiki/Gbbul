@@ -89,8 +89,3 @@ class GbbulManager {
         return bookList
     }
 }
-
-
-
-
-
