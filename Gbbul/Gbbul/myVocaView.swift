@@ -7,16 +7,17 @@
 
 import UIKit
 import SnapKit
+import CoreData
 
 class myVocaView: BaseViewController {
 
-    let vocabularyData: [(word: String, meaning: String)] = [
-        ("Apple", "사과"),
-        ("Banana", "바나나"),
-    ]
+    var vocabularyData: [MyVoca] = []
+    var gbbulManager = GbbulManager()
+    var selectedBookTitle: String?
+    var selectedBookId: Int64?
     
     let titleLabel: UILabel = {
-        $0.setUpLabel(title: "비 전공자를 위한 IT 단어장", fontSize: .large)
+        $0.setUpLabel(title: "", fontSize: .large)
         return $0
     }(UILabel())
     
@@ -32,13 +33,14 @@ class myVocaView: BaseViewController {
     
     let floatingButton: UIButton = {
         $0.setTitle("+", for: .normal)
-        $0.backgroundColor = Palette.boldPink.getColor()
+        $0.backgroundColor = Palette.pink.getColor()
         $0.layer.cornerRadius = 30
         $0.clipsToBounds = true
         return $0
     }(UIButton(type: .custom))
     
     let vocaTableView: UITableView = {
+        $0.setUpTableView()
         return $0
     }(UITableView())
     
@@ -48,6 +50,14 @@ class myVocaView: BaseViewController {
         setUI()
         setconstraints()
         setTableView()
+        setButtonTarget()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        setTableView()
+        vocabularyData = gbbulManager.getVoca(by: selectedBookId!) ?? []
+        vocaTableView.reloadData()
     }
     
     func setUI() {
@@ -56,6 +66,8 @@ class myVocaView: BaseViewController {
         view.addSubview(vocaTableView)
         view.addSubview(hiddenLabel)
         view.addSubview(learnButton)
+        
+        titleLabel.text = selectedBookTitle
     }
     
     func setconstraints() {
@@ -73,7 +85,8 @@ class myVocaView: BaseViewController {
         
         vocaTableView.snp.makeConstraints {
             $0.top.equalTo(titleLabel.snp.bottom).offset(20)
-            $0.left.right.equalToSuperview().offset(20)
+            $0.left.equalToSuperview().offset(20)
+            $0.right.equalToSuperview().offset(-20)
             $0.bottom.equalTo(learnButton.snp.top).offset(-20)
         }
         
@@ -90,15 +103,21 @@ class myVocaView: BaseViewController {
     }
     
     func setTableView() {
+        if let bookId = selectedBookId {
+            vocabularyData = gbbulManager.getVoca(by: bookId) ?? []
+        }
+        
         vocaTableView.delegate = self
         vocaTableView.dataSource = self
         
         if vocabularyData.isEmpty {
             hiddenLabel.isHidden = false
             vocaTableView.isHidden = true
+            learnButton.isHidden = true
         } else {
             hiddenLabel.isHidden = true
             vocaTableView.isHidden = false
+            learnButton.isHidden = false
         }
     }
     
@@ -108,9 +127,10 @@ class myVocaView: BaseViewController {
     }
     
     @objc func floatingButtonTapped() {
-        let vocaView2VC = myVocaView2()
+        let vocaView2 = myVocaView2()
         
-        present(vocaView2VC, animated: true)
+        vocaView2.selectedBookId = selectedBookId
+        self.navigationController?.pushViewController(vocaView2, animated: true)
     }
     
     @objc func learnButtonTapped() {
@@ -130,37 +150,10 @@ extension myVocaView: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "Cell")
         
-        let wordAndMeaning = vocabularyData[indexPath.row]
-        cell.textLabel?.text = wordAndMeaning.word
-        cell.detailTextLabel?.text = wordAndMeaning.meaning
-        
+        let myVoca = vocabularyData[indexPath.row]
+        cell.textLabel?.text = myVoca.myVocaName
+        cell.detailTextLabel?.text = myVoca.myVocaMean
+                
         return cell
     }
 }
-
-//import SwiftUI
-//
-//#if DEBUG
-//extension UIViewController {
-//    private struct Preview: UIViewControllerRepresentable {
-//        let viewController: UIViewController
-//
-//        func makeUIViewController(context: Context) -> UIViewController {
-//            return viewController
-//        }
-//
-//        func updateUIViewController(_ uiViewController: UIViewController, context: Context) {
-//        }
-//    }
-//
-//    func toPreview() -> some View {
-//        Preview(viewController: self)
-//    }
-//}
-//#endif
-//
-//struct VCPreView:PreviewProvider {
-//    static var previews: some View {
-//        myVocaView().toPreview()
-//    }
-//}
