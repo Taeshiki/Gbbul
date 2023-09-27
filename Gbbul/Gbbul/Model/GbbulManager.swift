@@ -89,36 +89,37 @@ class GbbulManager {
         return bookList
     }
     
-    // Read voca
-    func getVocaList() -> [Voca]? {
-        var vocaList: [Voca] = []
-        
-        do {
-            let fetchVocaList = try mainContext.fetch(Voca.fetchRequest())
-            vocaList = fetchVocaList
-        } catch {
-            print("데이터를 가져오는 중 오류 발생: \(error)")
-            return nil
+    func createMyVoca(bookId: Int64, vocaName: String, vocaMean: String) {
+        guard let myVocaEntity = NSEntityDescription.entity(forEntityName: "MyVoca", in: mainContext) else {
+            fatalError("MyVoca Entity를 찾을 수 없습니다.")
         }
-        return vocaList
+        
+        let myVoca = NSManagedObject(entity: myVocaEntity, insertInto: mainContext)
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        let currentDate = Date()
+        let dateString = dateFormatter.string(from: currentDate)
+        
+        myVoca.setValue(bookId, forKey: "bookId")
+        myVoca.setValue(dateString, forKey: "myCreateDate")
+        myVoca.setValue(UUID().hashValue, forKey: "myVocaId")
+        myVoca.setValue(vocaName, forKey: "myVocaName")
+        myVoca.setValue(vocaMean, forKey: "myVocaMean")
+        
+        saveContext()
     }
-    
-    // Read myVoca
-    func getMyVocaList() -> [MyVoca]? {
-        var myVocaList: [MyVoca] = []
+
+    func getVoca(by bookId: Int64) -> [MyVoca]? {
+        let fetchRequest: NSFetchRequest<MyVoca> = MyVoca.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "bookId == %@", NSNumber(value: bookId))
         
         do {
-            let fetchMyVocaList = try mainContext.fetch(MyVoca.fetchRequest())
-            myVocaList = fetchMyVocaList
+            let vocas = try mainContext.fetch(fetchRequest)
+            return vocas
         } catch {
             print("데이터를 가져오는 중 오류 발생: \(error)")
             return nil
         }
-        return myVocaList
     }
 }
-
-
-
-
-

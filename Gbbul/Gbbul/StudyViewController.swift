@@ -34,7 +34,7 @@ class StudyViewController: BaseViewController {
     // MARK: - 변수
     var manager = GbbulManager()
     
-    var bookId: Int?
+    var bookId: Int64?
     
     var testVocaList: [Int: TestVoca] = [:]
 
@@ -84,14 +84,16 @@ class StudyViewController: BaseViewController {
     }
 }
 
-// MARK: CoreData 관련
+// MARK: - CoreData 관련
 extension StudyViewController {
+    
+    // MARK: 매니저에서 불러오는 함수 지금 틀렸으니까 나중에 수정 반드시 할 것!!!
     func getTestVocaList() {
         guard let bookId = bookId else { return }
         
         // MyVoca
         if bookId <= 5000 {
-            guard let myVocaList = manager.getMyVocaList() else { return }
+            guard let myVocaList = manager.getVoca(by: bookId) else { return }
             for (index, item) in myVocaList.enumerated() {
                 if let name = item.myVocaName, let mean = item.myVocaMean {
                     testVocaList[index] = TestVoca(name: name, mean: mean)
@@ -99,9 +101,9 @@ extension StudyViewController {
             }
         // Voca
         } else if bookId > 5000 {
-            guard let myVocaList = manager.getVocaList() else { return }
+            guard let myVocaList = manager.getVoca(by: bookId) else { return }
             for (index, item) in myVocaList.enumerated() {
-                if let name = item.vocaName, let mean = item.vocaName {
+                if let name = item.myVocaName, let mean = item.myVocaMean {
                     testVocaList[index] = TestVoca(name: name, mean: mean)
                 }
             }

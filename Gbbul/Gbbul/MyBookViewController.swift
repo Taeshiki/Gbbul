@@ -136,7 +136,10 @@ extension MyBookViewController: UITableViewDelegate {
         if let selectedBook = manager.getBook()?[indexPath.row] {
             let vocaView = myVocaView()
             
-            self.present(vocaView, animated: true, completion: nil)
+            vocaView.selectedBookTitle = selectedBook.myBookName
+            vocaView.selectedBookId = selectedBook.bookId
+
+            self.navigationController?.pushViewController(vocaView, animated: true)
         }
     }
 }
