@@ -250,6 +250,8 @@ extension MyPageViewController : UITableViewDelegate, UITableViewDataSource
         if tableView == bookTableView
         {
             let bookId = bookData[indexPath.row].bookId
+            let vc = BookViewController()
+            navigationController?.pushViewController(vc, animated: true)
             print("selected booktableView Cell -> : \(bookId)")
         }else{
             let bookId = vocaData[indexPath.row].bookId
