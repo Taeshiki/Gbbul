@@ -185,7 +185,7 @@ extension StudyViewController {
                 showAlertTwoButton(title: "학습을 완료했습니다", message: nil, button1Title: "재시험", button2Title: "확인", completion1: {
                     print("button1Title")
                 }, completion2: {
-                    print("button2Title")
+                    self.navigationController?.popToRootViewController(animated: true)
                 })
             }
             
