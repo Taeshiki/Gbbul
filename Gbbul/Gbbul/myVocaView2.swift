@@ -104,8 +104,16 @@ class myVocaView2: BaseViewController {
     }
     
     @objc func addButtonTapped() {
-        guard let vocaName = vocaNameTextField.text, !vocaName.isEmpty,
-              let vocaMean = vocaMeanTextField.text, !vocaMean.isEmpty else {
+        guard let vocaName = vocaNameTextField.text, !vocaName.trimmingCharacters(in: .whitespaces).isEmpty,
+              let vocaMean = vocaMeanTextField.text, !vocaMean.trimmingCharacters(in: .whitespaces).isEmpty else {
+            
+            let alertController = UIAlertController(title: "알림", message: "단어와 의미를 입력하세요.", preferredStyle: .alert)
+            alertController.view.tintColor = Palette.purple.getColor()
+            
+            let okAction = UIAlertAction(title: "확인", style: .default)
+            alertController.addAction(okAction)
+            self.present(alertController, animated: true, completion: nil)
+            
             return
         }
 
@@ -118,5 +126,4 @@ class myVocaView2: BaseViewController {
         
         navigationController?.popViewController(animated: true)
     }
-
 }
