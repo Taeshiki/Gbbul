@@ -7,6 +7,7 @@
 
 import UIKit
 
+
 class BookViewController: UIViewController {
     // 테이블뷰
     private let tableView: UITableView = {
@@ -58,19 +59,34 @@ extension BookViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // 테이블 뷰의 셀 개수 반환
-        return 5 // 원하는 개수로 변경하세요.
+        return bookDatas.count // 원하는 개수로 변경하세요.
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         // 셀 구성 및 반환
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        cell.textLabel?.text = "테이블 뷰 셀" // 셀에 표시할 내용 설정
+        let bookData = bookDatas[indexPath.row]
+        cell.textLabel?.text = bookData.BookName // 셀에 표시할 내용 설정
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let viewController = BookInformationViewController()
-        viewController.modalPresentationStyle = .fullScreen
-        self.present(viewController, animated: true)
+        let bookInfoViewController = BookInformationViewController()
+        navigationController?.pushViewController(bookInfoViewController, animated: true)
     }
 }
+
+struct BookData{
+    let bookId : Int
+    let BookName : String
+    let CreateDate : String
+    
+}
+
+let bookDatas: [BookData] = [
+    BookData(bookId: 5001, BookName: "기초 영어단어 10", CreateDate: ""),
+    BookData(bookId: 5002, BookName: "기초 영어단어 20", CreateDate: ""),
+    BookData(bookId: 5003, BookName: "기초 영어단어 30", CreateDate: ""),
+    BookData(bookId: 5004, BookName: "기초 영어단어 40", CreateDate: ""),
+    BookData(bookId: 5005, BookName: "기초 영어단어 50", CreateDate: ""),
+]
