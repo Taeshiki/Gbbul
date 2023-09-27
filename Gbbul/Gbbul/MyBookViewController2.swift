@@ -116,7 +116,7 @@ class MyBookViewController2: BaseViewController {
             }
         }
         textField.text = ""
-        self.dismiss(animated: true, completion: nil)
+        self.navigationController?.popViewController(animated: true)
     }
 
 

@@ -61,7 +61,6 @@ class GbbulManager {
         guard let myBookEntity = NSEntityDescription.entity(forEntityName: "MyBook", in: mainContext) else {
             fatalError("MyBook Entity를 찾을 수 없습니다.")
         }
-        
         let myBook = NSManagedObject(entity: myBookEntity, insertInto: mainContext)
         
         let dateFormatter = DateFormatter()

@@ -48,12 +48,12 @@ class MyBookViewController: BaseViewController {
         
         addSubView()
         makeConstraints()
-
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-   
+        
         setupTableView()
         tableView.reloadData()
     }
@@ -111,10 +111,9 @@ class MyBookViewController: BaseViewController {
     
     
     @objc func addBookButtonTapped(){
-        // 네비게이션 컨트롤러 안쓰는지?
+        
         let nextVC = MyBookViewController2()
-        nextVC.modalPresentationStyle = .fullScreen
-        self.present(nextVC, animated: true, completion: nil)
+        self.navigationController?.pushViewController(nextVC, animated: true)
     }
     
     
@@ -125,11 +124,11 @@ class MyBookViewController: BaseViewController {
 // MARK: - UITableViewDelegate
 
 extension MyBookViewController: UITableViewDelegate {
-
-//    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-//        return 60
-//    }
-//
+    
+    //    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+    //        return 60
+    //    }
+    //
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
