@@ -183,7 +183,13 @@ extension StudyViewController {
             
             if vocaStackView.arrangedSubviews.count == 0 {
                 showAlertTwoButton(title: "학습을 완료했습니다", message: nil, button1Title: "재시험", button2Title: "확인", completion1: {
-                    print("button1Title")
+                    self.getTestVocaList()
+                    
+                    for i in self.testVocaList {
+                        self.addVocaView(index: i.key)
+                    }
+                    
+                    self.view.layoutIfNeeded()
                 }, completion2: {
                     self.navigationController?.popToRootViewController(animated: true)
                 })
