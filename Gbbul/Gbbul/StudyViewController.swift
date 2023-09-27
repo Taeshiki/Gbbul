@@ -121,7 +121,7 @@ extension StudyViewController {
         vocaLabel.setUpLabel(title: testVocaList[index]?.name ?? "", fontSize: .medium)
         
         vocaView.addSubview(vocaLabel)
-        vocaStackView.addSubview(vocaView)
+        vocaStackView.addArrangedSubview(vocaView)
         
         vocaView.snp.makeConstraints { make in
             make.centerX.centerY.equalToSuperview()
@@ -157,16 +157,16 @@ extension StudyViewController {
             // 오른쪽
             if (voca.center.x) > 20 {
                 UIView.animate(withDuration: 0.2) {
-                    voca.center = CGPoint(x: voca.center .x,
-                                          y: voca.center .y)
+                    voca.center = CGPoint(x: voca.center.x,
+                                          y: voca.center.y)
                     voca.alpha = 0
                 }
                 
             // 왼쪽
             } else if voca.center.x < -20 {
                 UIView.animate(withDuration: 0.2) {
-                    voca.center = CGPoint(x: voca.center .x,
-                                          y: voca.center .y)
+                    voca.center = CGPoint(x: voca.center.x,
+                                          y: voca.center.y)
                     voca.alpha = 0
                 }
 
@@ -178,7 +178,17 @@ extension StudyViewController {
                                           y: self.view.frame.height / 2)
                 }
             }
-
+            
+            vocaStackView.removeArrangedSubview(voca)
+            
+            if vocaStackView.arrangedSubviews.count == 0 {
+                showAlertTwoButton(title: "학습을 완료했습니다", message: nil, button1Title: "재시험", button2Title: "확인", completion1: {
+                    print("button1Title")
+                }, completion2: {
+                    print("button2Title")
+                })
+            }
+            
         // 제스처가 움직이고 있을 때, 비스듬하게
         case .changed:
             let rotation = point.x / view.frame.width
