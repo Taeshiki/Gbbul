@@ -157,6 +157,7 @@ extension myVocaView: UITableViewDelegate {
         let selectedVoca = vocabularyData[indexPath.row]
         
         let alertController = UIAlertController(title: "단어 수정", message: "단어와 의미를 수정해 주세요.", preferredStyle: .alert)
+        alertController.view.tintColor = Palette.purple.getColor()
         
         alertController.addTextField { (textField) in
             textField.text = selectedVoca.myVocaName
