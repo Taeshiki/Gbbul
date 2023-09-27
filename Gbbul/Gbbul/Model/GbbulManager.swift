@@ -127,5 +127,4 @@ class GbbulManager {
             mainContext.delete(myVoca)
             saveContext()
         }
-
 }
