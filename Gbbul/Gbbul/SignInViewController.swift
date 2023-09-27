@@ -9,12 +9,15 @@ import UIKit
 import SnapKit
 
 enum LayoutMultiplier: CGFloat {
+    case superExtraSmall
     case extraSmall
     case quarter
     case medium
     case half
     func getScale() -> Double {
         switch self{
+        case .superExtraSmall:
+            return 0.02
         case .extraSmall:
             return 0.05
         case .quarter:

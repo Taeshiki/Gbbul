@@ -141,7 +141,8 @@ class GbbulManager {
     }
     
     
-    func getVoca(by bookId: Int64) -> [MyVoca]? {
+
+    func getMyVoca(by bookId: Int64) -> [MyVoca]? {
         let fetchRequest: NSFetchRequest<MyVoca> = MyVoca.fetchRequest()
         fetchRequest.predicate = NSPredicate(format: "bookId == %@", NSNumber(value: bookId))
         

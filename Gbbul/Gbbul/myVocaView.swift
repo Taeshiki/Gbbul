@@ -56,7 +56,7 @@ class myVocaView: BaseViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setTableView()
-        vocabularyData = gbbulManager.getVoca(by: selectedBookId!) ?? []
+        vocabularyData = gbbulManager.getMyVoca(by: selectedBookId!) ?? []
         vocaTableView.reloadData()
     }
     
@@ -104,7 +104,7 @@ class myVocaView: BaseViewController {
     
     func setTableView() {
         if let bookId = selectedBookId {
-            vocabularyData = gbbulManager.getVoca(by: bookId) ?? []
+            vocabularyData = gbbulManager.getMyVoca(by: bookId) ?? []
         }
         
         vocaTableView.delegate = self
@@ -134,7 +134,9 @@ class myVocaView: BaseViewController {
     }
     
     @objc func learnButtonTapped() {
-        
+        let studyViewController = StudyViewController()
+        studyViewController.bookId = selectedBookId
+        navigationController?.pushViewController(studyViewController, animated: false)
     }
 }
 

@@ -15,43 +15,41 @@ class MyPageViewController: BaseViewController {
     }()
     private lazy var nicknameLabel : UILabel = {
         let titleLabel = UILabel()
-        titleLabel.setUpLabel(title: "닉네임 :", fontSize: .medium)
+        titleLabel.setUpLabel(title: "닉네임 :", fontSize: .medium, isFontBold:  false, titleColor: .lightGray)
         return titleLabel
     }()
     private lazy var levelLabel : UILabel = {
         let titleLabel = UILabel()
-        titleLabel.setUpLabel(title: "레벨 : LV", fontSize: .medium)
+        titleLabel.setUpLabel(title: "레벨 : LV", fontSize: .medium,  isFontBold:  false, titleColor: .lightGray)
         return titleLabel
     }()
     private lazy var nextLabel : UILabel = {
         let titleLabel = UILabel()
-        titleLabel.setUpLabel(title: "다음레벨 LV", fontSize: .small)
+        titleLabel.setUpLabel(title: "다음레벨 LV", fontSize: .small, titleColor: .lightGray)
         return titleLabel
     }()
     private lazy var myVocaLabel : UILabel = {
         let titleLabel = UILabel()
-        titleLabel.setUpLabel(title: "단어 공유소", fontSize: .medium)
+        titleLabel.setUpLabel(title: "단어 공유소", fontSize: .medium, titleColor: .lightGray)
         return titleLabel
     }()
     private lazy var myBookLabel : UILabel = {
         let titleLabel = UILabel()
-        titleLabel.setUpLabel(title: "내 단어장", fontSize: .medium)
+        titleLabel.setUpLabel(title: "내 단어장", fontSize: .medium, titleColor: .lightGray)
         return titleLabel
     }()
     private lazy var ratingView: UIView = {
         let view = UIView()
-        view.layer.cornerRadius = 10
-        view.layer.masksToBounds = true
-        view.backgroundColor = Palette.boldPink.getColor()
+        view.setUpView()
         
         let stackView = UIStackView()
         stackView.axis = .horizontal
         stackView.alignment = .fill
         stackView.distribution = .fillEqually
         for _ in 1...5 {
-            let starImageView = UIImageView()
-            starImageView.image = UIImage(systemName: "star")
-            stackView.addArrangedSubview(starImageView)
+            let ratingView = UIView()
+            ratingView.setUpView(borderColor : .purple, borderWidth: 1)
+            stackView.addArrangedSubview(ratingView)
         }
         view.addSubview(stackView)
         stackView.snp.makeConstraints {
@@ -61,7 +59,7 @@ class MyPageViewController: BaseViewController {
     }()
     private lazy var bookTableView : UITableView = {
         let bookTableView = UITableView()
-        bookTableView.setUpTableView()
+        bookTableView.setUpTableView(borderColor : .lightBlue)
         bookTableView.delegate = self
         bookTableView.dataSource = self
         bookTableView.register(MyPageCustomCell.self, forCellReuseIdentifier: "MyPageCustomCell")
@@ -69,7 +67,7 @@ class MyPageViewController: BaseViewController {
     }()
     private lazy var vocaTableView : UITableView = {
         let vocaTableView = UITableView()
-        vocaTableView.setUpTableView()
+        vocaTableView.setUpTableView(borderColor : .boldPink)
         vocaTableView.delegate = self
         vocaTableView.dataSource = self
         vocaTableView.register(MyPageCustomCell.self, forCellReuseIdentifier: "MyPageCustomCell")
@@ -90,12 +88,18 @@ class MyPageViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configUI()
-        getCorrectRateData()
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
+        loadCorrectRateData()
         loadUserData()
+        loadTableView()
     }
+    private func loadTableView(){
+        bookTableView.reloadData()
+        vocaTableView.reloadData()
+    }
+    
     private func configUI(){
         [titleLabel,nicknameLabel,levelLabel,ratingView,nextLabel,myVocaLabel,nextLabel,myBookLabel,bookTableView,vocaTableView].forEach(view.addSubview)
         titleLabel.snp.makeConstraints {
@@ -103,7 +107,7 @@ class MyPageViewController: BaseViewController {
             $0.leading.equalTo(view.safeAreaLayoutGuide.snp.leading).offset(ConstMargin.safeAreaLeftMargin.getMargin())
         }
         nicknameLabel.snp.makeConstraints {
-            $0.top.equalTo(titleLabel.snp.bottom).offset(20)
+            $0.top.equalTo(titleLabel.snp.bottom).offset(10)
             $0.leading.equalTo(titleLabel.snp.leading)
         }
         levelLabel.snp.makeConstraints {
@@ -118,7 +122,7 @@ class MyPageViewController: BaseViewController {
             $0.top.equalTo(nextLabel.snp.bottom).offset(5)
             $0.leading.equalTo(titleLabel.snp.leading)
             $0.trailing.equalTo(nextLabel.snp.trailing)
-            $0.height.equalTo(view.snp.height).multipliedBy(LayoutMultiplier.extraSmall.getScale())
+            $0.height.equalTo(view.snp.height).multipliedBy(LayoutMultiplier.superExtraSmall.getScale())
         }
         myVocaLabel.snp.makeConstraints{
             $0.top.equalTo(ratingView.snp.bottom).offset(10)
@@ -138,8 +142,8 @@ class MyPageViewController: BaseViewController {
             $0.top.equalTo(myBookLabel.snp.bottom).offset(10)
             $0.leading.equalTo(ratingView.snp.leading)
             $0.trailing.equalTo(ratingView.snp.trailing)
-            $0.bottom.lessThanOrEqualTo(view.safeAreaLayoutGuide.snp.bottom)
             $0.height.equalToSuperview().multipliedBy(LayoutMultiplier.quarter.getScale())
+            $0.bottom.lessThanOrEqualTo(view.safeAreaLayoutGuide.snp.bottom).offset(-ConstMargin.safeAreaBottomMargin.getMargin())
         }
     }
 }
@@ -148,12 +152,11 @@ extension MyPageViewController{
         for (_, subview) in ratingView.subviews.enumerated() {
             if let stackView = subview as? UIStackView {
                 for (starIndex, starImageView) in stackView.arrangedSubviews.enumerated() {
-                    if let starImageView = starImageView as? UIImageView {
-                        if starIndex < number {
-                            starImageView.image = UIImage(systemName: "star.fill")
-                        } else {
-                            starImageView.image = UIImage(systemName: "star")
-                        }
+                    if starIndex < number {
+                        starImageView.backgroundColor = Palette.boldPink.getColor()
+                        
+                    } else {
+                        starImageView.backgroundColor = .white
                     }
                 }
             }
@@ -169,10 +172,12 @@ extension MyPageViewController{
         }
         levelLabel.text = "레벨 : Lv" + String(currentUser.level)
         nextLabel.text = "다음레벨 LV" + String(currentUser.level+1)
-        let exp = currentUser.exp
+        //let exp = currentUser.exp // Todo 레이팅 세팅.
+        let exp = 3
         setRate(number: Int(exp))
+        
     }
-    private func getCorrectRateData(){
+    private func loadCorrectRateData(){
         // Todo CoreData 기준으로 분류
         for correctRate in correctRates {
             let bookId = correctRate.bookId
@@ -209,26 +214,19 @@ extension MyPageViewController : UITableViewDelegate, UITableViewDataSource
             return vocaData.count
         }
     }
-    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if tableView == bookTableView{
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: "MyPageCustomCell") as? MyPageCustomCell else {
-                return UITableViewCell()
-            }
-            cell.titleLabel.text = bookData[indexPath.row].bookName
-            cell.bookId = bookData[indexPath.row].bookId
-            cell.correctRateLabel.text = "정답률 \(String(bookData[indexPath.row].rate))%"
-            return cell
-            
-        }else{
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: "MyPageCustomCell") as? MyPageCustomCell else {
-                return UITableViewCell()
-            }
-            cell.titleLabel.text = vocaData[indexPath.row].bookName
-            cell.bookId = vocaData[indexPath.row].bookId
-            cell.correctRateLabel.text = "정답률 \(String(vocaData[indexPath.row].rate))%"
-            return cell
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "MyPageCustomCell") as? MyPageCustomCell else {
+            return UITableViewCell()
         }
+
+        if tableView == bookTableView {
+            let book = bookData[indexPath.row]
+            configCellStyle(cell, bookName: book.bookName, bookId: book.bookId, rate: book.rate)
+        } else {
+            let voca = vocaData[indexPath.row]
+            configCellStyle(cell, bookName: voca.bookName, bookId: voca.bookId, rate: voca.rate)
+        }
+        return cell
     }
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         if tableView == bookTableView
@@ -246,20 +244,26 @@ extension MyPageViewController : UITableViewDelegate, UITableViewDataSource
         }
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        //Todo 화면전환
         if tableView == bookTableView
         {
-            let bookId = bookData[indexPath.row].bookId
-            let vc = BookViewController()
+            let vc = MyBookViewController()
             navigationController?.pushViewController(vc, animated: true)
-            print("selected booktableView Cell -> : \(bookId)")
-        }else{
-            let bookId = vocaData[indexPath.row].bookId
-            print("selected vocatableView Cell -> : \(bookId)")
         }
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return view.bounds.height * LayoutMultiplier.extraSmall.getScale()
+    }
+    func configCellStyle(_ cell: MyPageCustomCell, bookName: String, bookId: Int, rate: Double) {
+        cell.titleLabel.text = bookName
+        cell.bookId = bookId
+        cell.correctRateLabel.text = "정답률 \(String(rate))%"
+        if rate == 100.0 {
+            cell.correctRateLabel.textColor = Palette.lightBlue.getColor()
+        } else if (rate >= 40.0 && rate < 100) {
+            cell.correctRateLabel.textColor = Palette.lightGray.getColor()
+        } else {
+            cell.correctRateLabel.textColor = Palette.red.getColor()
+        }
     }
 }
 
@@ -267,13 +271,13 @@ class MyPageCustomCell : UITableViewCell
 {
     var titleLabel : UILabel = {
         let titleLabel = UILabel()
-        titleLabel.setUpLabel(title: "", fontSize: .medium)
+        titleLabel.setUpLabel(title: "", fontSize: .medium, isFontBold:  false, titleColor: .lightGray)
         titleLabel.textAlignment = .left
         return titleLabel
     }()
     var correctRateLabel : UILabel = {
         let correctRateLabel = UILabel()
-        correctRateLabel.setUpLabel(title: "", fontSize: .medium)
+        correctRateLabel.setUpLabel(title: "", fontSize: .medium, isFontBold:  false, titleColor: .lightGray)
         correctRateLabel.textAlignment = .right
         return correctRateLabel
     }()
@@ -300,7 +304,7 @@ class MyPageCustomCell : UITableViewCell
         }
         correctRateLabel.snp.makeConstraints {
             $0.centerY.equalTo(titleLabel)
-            $0.leading.equalTo(titleLabel.snp.trailing).offset(10)
+            $0.leading.equalTo(titleLabel.snp.trailing)
             $0.trailing.equalTo(contentView.safeAreaLayoutGuide.snp.trailing).offset(-10)
         }
     }
@@ -341,13 +345,13 @@ let vocas: [voca] = [
 ]
 
 
-let correctRates : [correctRate] = [
+var correctRates : [correctRate] = [
     correctRate(bookId: myBooks[0].bookId, total: 25, correct: 10, incorrect:20, rate: 45),
     correctRate(bookId: myBooks[1].bookId, total: 25, correct: 10, incorrect:20, rate: 65),
     correctRate(bookId: myBooks[2].bookId, total: 25, correct: 10, incorrect:20, rate: 78),
-    correctRate(bookId: myBooks[3].bookId, total: 25, correct: 10, incorrect:20, rate: 55),
+    correctRate(bookId: myBooks[3].bookId, total: 25, correct: 10, incorrect:20, rate: 100),
     correctRate(bookId: vocas[0].bookId, total: 25, correct: 10, incorrect:20, rate: 14),
-    correctRate(bookId: vocas[1].bookId, total: 25, correct: 10, incorrect:20, rate: 23),
+    correctRate(bookId: vocas[1].bookId, total: 25, correct: 10, incorrect:20, rate: 100),
     correctRate(bookId: vocas[2].bookId, total: 25, correct: 10, incorrect:20, rate: 51),
     correctRate(bookId: vocas[3].bookId, total: 25, correct: 10, incorrect:20, rate: 66),
     correctRate(bookId: vocas[4].bookId, total: 25, correct: 10, incorrect:20, rate: 77)
