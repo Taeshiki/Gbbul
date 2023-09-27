@@ -10,7 +10,7 @@ import SnapKit
 import CoreData
 
 class myVocaView: BaseViewController {
-
+    
     var vocabularyData: [MyVoca] = []
     var gbbulManager = GbbulManager()
     var selectedBookTitle: String?
@@ -21,12 +21,26 @@ class myVocaView: BaseViewController {
         return $0
     }(UILabel())
     
+    let titleTextField: UITextField = {
+        $0.font = UIFont.systemFont(ofSize: 16)
+        //$0.backgroundColor = .yellow
+        $0.textAlignment = .left
+        $0.borderStyle = .none
+        $0.isUserInteractionEnabled = false // 초기에는 수정 불가능하도록 설정
+        return $0
+    }(UITextField())
+
     let editButton: UIButton = {
-        $0.setImage(UIImage(systemName: "pencil.circle.fill"), for: .normal)
+        let image = UIImage(systemName: "pencil.circle.fill")
+        let resizedImage = $0.resizeImageButton(image: image, width: 60, height: 60, color: Palette.purple.getColor())
+        $0.setImage(resizedImage, for: .normal)
+        $0.imageView?.contentMode = .scaleAspectFill
+        $0.layer.cornerRadius = 30
+        $0.clipsToBounds = true
         $0.tintColor = Palette.purple.getColor()
         $0.setTitleColor(Palette.white.getColor(), for: .normal)
         return $0
-    }(UIButton())
+    }(UIButton(type: .custom))
     
     let hiddenLabel: UILabel = {
         $0.setUpLabel(title: "단어를 추가 해주세요.", fontSize: .medium)
@@ -69,6 +83,7 @@ class myVocaView: BaseViewController {
     
     func setUI() {
         view.addSubview(titleLabel)
+        view.addSubview(titleTextField)
         view.addSubview(editButton)
         view.addSubview(floatingButton)
         view.addSubview(vocaTableView)
@@ -82,12 +97,19 @@ class myVocaView: BaseViewController {
         titleLabel.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(ConstMargin.safeAreaTopMargin.getMargin())
             $0.left.equalTo(view.safeAreaLayoutGuide.snp.left).offset(ConstMargin.safeAreaLeftMargin.getMargin())
-            $0.right.equalTo(view.safeAreaLayoutGuide.snp.right).offset(ConstMargin.safeAreaRightMargin.getMargin())
+            $0.right.equalTo(view.safeAreaLayoutGuide.snp.right).offset(-ConstMargin.safeAreaRightMargin.getMargin())
+        }
+        
+        titleTextField.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(ConstMargin.safeAreaTopMargin.getMargin())
+            $0.left.equalTo(view.safeAreaLayoutGuide.snp.left).offset(ConstMargin.safeAreaLeftMargin.getMargin())
+            $0.right.equalTo(view.safeAreaLayoutGuide.snp.right).offset(-ConstMargin.safeAreaRightMargin.getMargin())
         }
         
         editButton.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(25)
-            $0.left.equalTo(view.safeAreaLayoutGuide.snp.left).offset(90)
+            $0.top.equalTo(floatingButton.snp.top)
+            $0.right.equalTo(floatingButton.snp.left).offset(-10)
+            $0.width.height.equalTo(60)
         }
         
         floatingButton.snp.makeConstraints {
@@ -137,6 +159,7 @@ class myVocaView: BaseViewController {
     func setButtonTarget() {
         floatingButton.addTarget(self, action: #selector(floatingButtonTapped), for: .touchUpInside)
         learnButton.addTarget(self, action: #selector(learnButtonTapped), for: .touchUpInside)
+        editButton.addTarget(self, action: #selector(editButtonTapped), for: .touchUpInside)
     }
     
     @objc func floatingButtonTapped() {
@@ -151,7 +174,16 @@ class myVocaView: BaseViewController {
         studyViewController.bookId = selectedBookId
         navigationController?.pushViewController(studyViewController, animated: false)
     }
+    
+    
+    @objc func editButtonTapped(){
+        
+        print("에딧버튼눌림")
+    }
 }
+
+
+
 
 extension myVocaView: UITableViewDelegate {
     
@@ -168,7 +200,7 @@ extension myVocaView: UITableViewDataSource {
         let myVoca = vocabularyData[indexPath.row]
         cell.textLabel?.text = myVoca.myVocaName
         cell.detailTextLabel?.text = myVoca.myVocaMean
-                
+        
         return cell
     }
 }
