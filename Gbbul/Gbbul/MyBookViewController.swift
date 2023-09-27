@@ -10,7 +10,7 @@ import CoreData
 
 class MyBookViewController: BaseViewController {
     private var manager = GbbulManager()
-
+    
     private lazy var titleLabel = {
         let label = UILabel()
         label.setUpLabel(title: "단어장 추가하기", fontSize: .large)
@@ -34,6 +34,9 @@ class MyBookViewController: BaseViewController {
     
     private lazy var tableView = {
         let tv = UITableView()
+        tv.layer.borderWidth = 1
+        tv.layer.borderColor = Palette.purple.getColor().cgColor
+        tv.layer.cornerRadius = 10
         return tv
     }()
     
@@ -45,12 +48,13 @@ class MyBookViewController: BaseViewController {
         
         addSubView()
         makeConstraints()
-        setupTableView()
-        
+
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+   
+        setupTableView()
         tableView.reloadData()
     }
     
@@ -91,7 +95,6 @@ class MyBookViewController: BaseViewController {
             make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-ConstMargin.safeAreaBottomMargin.getMargin())
         }
         
-        
     }
     
     func setupTableView(){
@@ -122,18 +125,23 @@ class MyBookViewController: BaseViewController {
 // MARK: - UITableViewDelegate
 
 extension MyBookViewController: UITableViewDelegate {
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 60
-    }
-    
+
+//    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+//        return 60
+//    }
+//
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+        if let selectedBook = manager.getBook()?[indexPath.row] {
+            let vocaView = myVocaView()
+            
+            self.present(vocaView, animated: true, completion: nil)
+        }
     }
-    
-    
 }
+
+
 
 
 // MARK: - UITableViewDataSource
