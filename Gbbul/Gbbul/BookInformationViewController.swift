@@ -73,16 +73,31 @@ extension BookInformationViewController: UITableViewDataSource, UITableViewDeleg
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // 테이블 뷰의 셀 개수 반환
-        return 5 // 원하는 개수로 변경하세요.
+        return vocaDatas.count // 원하는 개수로 변경하세요.
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         // 셀 구성 및 반환
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        cell.textLabel?.text = "테이블 뷰 셀" // 셀에 표시할 내용 설정
+        let vocaData = vocaDatas[indexPath.row]
+        cell.textLabel?.text = "\(vocaData.vocaName) : \(vocaData.vocaMean)"// 셀에 표시할 내용 설정
         return cell
     }
     
 }
 
-// 화면이동 뭘로 하지?
+struct VocaData{
+    let bookId : Int
+    let vocaId : Int
+    let vocaName : String
+    let vocaMean : String
+    let createDate : String
+}
+
+let vocaDatas: [VocaData] = [
+    VocaData(bookId: 5001, vocaId: 5001, vocaName: "culture", vocaMean: "문화", createDate: ""),
+    VocaData(bookId: 5001, vocaId: 5002, vocaName: "experience", vocaMean: "경험", createDate: ""),
+    VocaData(bookId: 5001, vocaId: 5003, vocaName: "education", vocaMean: "교육", createDate: ""),
+    VocaData(bookId: 5001, vocaId: 5004, vocaName: "symbol", vocaMean: "상징", createDate: ""),
+    VocaData(bookId: 5001, vocaId: 5005, vocaName: "effect", vocaMean: "결과, 영향, 효과", createDate: ""),
+]
