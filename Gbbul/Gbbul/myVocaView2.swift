@@ -7,8 +7,12 @@
 
 import UIKit
 import SnapKit
+import CoreData
 
 class myVocaView2: BaseViewController {
+
+    var gbbulManager = GbbulManager()
+    var selectedBookId: Int64?
 
     let titleLabel: UILabel = {
         $0.setUpLabel(title: "단어 추가하기", fontSize: .large)
@@ -100,33 +104,19 @@ class myVocaView2: BaseViewController {
     }
     
     @objc func addButtonTapped() {
-       
-    }
-}
+        guard let vocaName = vocaNameTextField.text, !vocaName.isEmpty,
+              let vocaMean = vocaMeanTextField.text, !vocaMean.isEmpty else {
+            return
+        }
 
-//import SwiftUI
-//
-//#if DEBUG
-//extension UIViewController {
-//    private struct Preview: UIViewControllerRepresentable {
-//        let viewController: UIViewController
-//
-//        func makeUIViewController(context: Context) -> UIViewController {
-//            return viewController
-//        }
-//
-//        func updateUIViewController(_ uiViewController: UIViewController, context: Context) {
-//        }
-//    }
-//
-//    func toPreview() -> some View {
-//        Preview(viewController: self)
-//    }
-//}
-//#endif
-//
-//struct VCPreView:PreviewProvider {
-//    static var previews: some View {
-//        myVocaView2().toPreview()
-//    }
-//}
+        let bookId: Int64 = selectedBookId!
+
+        gbbulManager.createMyVoca(bookId: bookId, vocaName: vocaName, vocaMean: vocaMean)
+        
+        vocaNameTextField.text = ""
+        vocaMeanTextField.text = ""
+        
+        navigationController?.popViewController(animated: true)
+    }
+
+}
