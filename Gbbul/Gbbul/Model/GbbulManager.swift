@@ -122,4 +122,17 @@ class GbbulManager {
             return nil
         }
     }
+    
+    func getVoca(by bookId: Int64) -> [Voca]? {
+        let fetchRequest: NSFetchRequest<Voca> = Voca.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "bookId == %@", NSNumber(value: bookId))
+        
+        do {
+            let vocas = try mainContext.fetch(fetchRequest)
+            return vocas
+        } catch {
+            print("데이터를 가져오는 중 오류 발생: \(error)")
+            return nil
+        }
+    }
 }

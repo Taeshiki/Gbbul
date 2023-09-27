@@ -63,6 +63,29 @@ extension UIViewController {
         alert.addAction(action)
         present(alert, animated: true, completion: nil)
     }
+    
+    func showAlertTwoButton(title: String,
+                            message: String?,
+                            button1Title: String,
+                            button2Title: String,
+                            completion1: (() -> Void)? = nil,
+                            completion2: (() -> Void)? = nil) {
+        
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+
+        let action1 = UIAlertAction(title: button1Title, style: .default) { _ in
+            completion1?()
+        }
+
+        let action2 = UIAlertAction(title: button2Title, style: .default) { _ in
+            completion2?()
+        }
+
+        alertController.addAction(action1)
+        alertController.addAction(action2)
+
+        present(alertController, animated: true, completion: nil)
+    }
 }
 extension Date{
     func GetCurrentTime() -> String{
