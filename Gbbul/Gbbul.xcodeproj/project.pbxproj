@@ -24,7 +24,6 @@
 		27E9DB132AC283B6008DD8D8 /* myVocaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27E9DB122AC283B6008DD8D8 /* myVocaView.swift */; };
 		27E9DB152AC28412008DD8D8 /* myVocaView2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27E9DB142AC28412008DD8D8 /* myVocaView2.swift */; };
 		67D0057B2AC2800C001A1CD3 /* MyBookViewController2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67D0057A2AC2800C001A1CD3 /* MyBookViewController2.swift */; };
-
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -46,7 +45,6 @@
 		27E9DB122AC283B6008DD8D8 /* myVocaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = myVocaView.swift; sourceTree = "<group>"; };
 		27E9DB142AC28412008DD8D8 /* myVocaView2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = myVocaView2.swift; sourceTree = "<group>"; };
 		67D0057A2AC2800C001A1CD3 /* MyBookViewController2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyBookViewController2.swift; sourceTree = "<group>"; };
-
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,9 +84,9 @@
 				26975CE02AC16B300052D5D3 /* BookViewController.swift */,
 				26EB19792AC2CD9400A1B78B /* BookInformationViewController.swift */,
 				26975CDF2AC16B300052D5D3 /* MyBookViewController.swift */,
+				67D0057A2AC2800C001A1CD3 /* MyBookViewController2.swift */,
 				27E9DB122AC283B6008DD8D8 /* myVocaView.swift */,
 				27E9DB142AC28412008DD8D8 /* myVocaView2.swift */,
-				67D0057A2AC2800C001A1CD3 /* MyBookViewController2.swift */,
 				26975CDD2AC16B300052D5D3 /* MyPageViewController.swift */,
 				26975CDE2AC16B300052D5D3 /* SignInViewController.swift */,
 				0A905DF42AC28D9A001364D1 /* StudyViewController.swift */,

@@ -53,7 +53,7 @@ class MyBookViewController2: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-//        print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
+        print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
         addSubView()
         makeConstraints()
         textField.delegate = self
@@ -100,13 +100,26 @@ class MyBookViewController2: BaseViewController {
     }
     
     
-    @objc func addButtonTapped(){
+    @objc func addButtonTapped() {
         if let newBookName = textField.text, !newBookName.isEmpty {
-            manager.createMyBook(name: newBookName, id: 0)
-         }
-         textField.text = ""
-         self.dismiss(animated: true, completion: nil)
-     }
+            if let bookList = manager.getBook() {
+                if bookList.count < 5000 {
+                    if let lastBook = bookList.last {
+                        let newId = lastBook.bookId + 1
+                        manager.createMyBook(name: newBookName, id: Int(newId))
+                    } else {
+                        manager.createMyBook(name: newBookName, id: 0)
+                    }
+                } else {
+                    print("5000개 넘었습니다.")
+                }
+            }
+        }
+        textField.text = ""
+        self.dismiss(animated: true, completion: nil)
+    }
+
+
     
     
 }
