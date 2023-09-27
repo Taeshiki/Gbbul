@@ -16,16 +16,16 @@ class myVocaView: BaseViewController {
     var selectedBookTitle: String?
     var selectedBookId: Int64?
     
-    let titleLabel: UILabel = {
-        $0.setUpLabel(title: "", fontSize: .large)
-        return $0
-    }(UILabel())
+//    let titleLabel: UILabel = {
+//        $0.setUpLabel(title: "", fontSize: .large)
+//        return $0
+//    }(UILabel())
     
     let titleTextField: UITextField = {
-        $0.font = UIFont.systemFont(ofSize: 16)
-        //$0.backgroundColor = .yellow
+        $0.font = UIFont.boldSystemFont(ofSize: 25)
         $0.textAlignment = .left
         $0.borderStyle = .none
+        $0.textColor = Palette.purple.getColor()
         $0.isUserInteractionEnabled = false // 초기에는 수정 불가능하도록 설정
         return $0
     }(UITextField())
@@ -34,9 +34,6 @@ class myVocaView: BaseViewController {
         let image = UIImage(systemName: "pencil.circle.fill")
         let resizedImage = $0.resizeImageButton(image: image, width: 60, height: 60, color: Palette.purple.getColor())
         $0.setImage(resizedImage, for: .normal)
-        $0.imageView?.contentMode = .scaleAspectFill
-        $0.layer.cornerRadius = 30
-        $0.clipsToBounds = true
         $0.tintColor = Palette.purple.getColor()
         $0.setTitleColor(Palette.white.getColor(), for: .normal)
         return $0
@@ -82,7 +79,7 @@ class myVocaView: BaseViewController {
     }
     
     func setUI() {
-        view.addSubview(titleLabel)
+//        view.addSubview(titleLabel)
         view.addSubview(titleTextField)
         view.addSubview(editButton)
         view.addSubview(floatingButton)
@@ -90,26 +87,28 @@ class myVocaView: BaseViewController {
         view.addSubview(hiddenLabel)
         view.addSubview(learnButton)
         
-        titleLabel.text = selectedBookTitle
+//        titleLabel.text = selectedBookTitle
+        titleTextField.text = selectedBookTitle
     }
     
     func setconstraints() {
-        titleLabel.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(ConstMargin.safeAreaTopMargin.getMargin())
-            $0.left.equalTo(view.safeAreaLayoutGuide.snp.left).offset(ConstMargin.safeAreaLeftMargin.getMargin())
-            $0.right.equalTo(view.safeAreaLayoutGuide.snp.right).offset(-ConstMargin.safeAreaRightMargin.getMargin())
-        }
+//        titleLabel.snp.makeConstraints {
+//            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(ConstMargin.safeAreaTopMargin.getMargin())
+//            $0.left.equalTo(view.safeAreaLayoutGuide.snp.left).offset(ConstMargin.safeAreaLeftMargin.getMargin())
+//            $0.right.equalTo(view.safeAreaLayoutGuide.snp.right).offset(-ConstMargin.safeAreaRightMargin.getMargin())
+//        }
         
         titleTextField.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(ConstMargin.safeAreaTopMargin.getMargin())
             $0.left.equalTo(view.safeAreaLayoutGuide.snp.left).offset(ConstMargin.safeAreaLeftMargin.getMargin())
             $0.right.equalTo(view.safeAreaLayoutGuide.snp.right).offset(-ConstMargin.safeAreaRightMargin.getMargin())
+            $0.height.equalTo(40)
         }
         
         editButton.snp.makeConstraints {
             $0.top.equalTo(floatingButton.snp.top)
             $0.right.equalTo(floatingButton.snp.left).offset(-10)
-            $0.width.height.equalTo(60)
+
         }
         
         floatingButton.snp.makeConstraints {
@@ -119,14 +118,14 @@ class myVocaView: BaseViewController {
         }
         
         vocaTableView.snp.makeConstraints {
-            $0.top.equalTo(titleLabel.snp.bottom).offset(20)
+            $0.top.equalTo(titleTextField.snp.bottom).offset(20)
             $0.left.equalToSuperview().offset(20)
             $0.right.equalToSuperview().offset(-20)
             $0.bottom.equalTo(learnButton.snp.top).offset(-20)
         }
         
         hiddenLabel.snp.makeConstraints {
-            $0.top.equalTo(titleLabel.snp.bottom).offset(20)
+            $0.top.equalTo(titleTextField.snp.bottom).offset(20)
             $0.left.right.equalToSuperview().offset(20)
         }
         
@@ -176,9 +175,14 @@ class myVocaView: BaseViewController {
     }
     
     
-    @objc func editButtonTapped(){
-        
+    @objc func editButtonTapped() {
         print("에딧버튼눌림")
+        
+        titleTextField.isUserInteractionEnabled = true
+        titleTextField.borderStyle = .roundedRect
+        titleTextField.layer.borderWidth = 1
+        titleTextField.layer.borderColor = Palette.purple.getColor().cgColor
+        titleTextField.layer.cornerRadius = 10
     }
 }
 
