@@ -108,6 +108,8 @@ class myVocaView2: BaseViewController {
               let vocaMean = vocaMeanTextField.text, !vocaMean.trimmingCharacters(in: .whitespaces).isEmpty else {
             
             let alertController = UIAlertController(title: "알림", message: "단어와 의미를 입력하세요.", preferredStyle: .alert)
+            alertController.view.tintColor = Palette.purple.getColor()
+            
             let okAction = UIAlertAction(title: "확인", style: .default)
             alertController.addAction(okAction)
             self.present(alertController, animated: true, completion: nil)
