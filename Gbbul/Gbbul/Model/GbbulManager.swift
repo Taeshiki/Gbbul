@@ -88,6 +88,34 @@ class GbbulManager {
         }
         return bookList
     }
+    
+    // Read voca
+    func getVocaList() -> [Voca]? {
+        var vocaList: [Voca] = []
+        
+        do {
+            let fetchVocaList = try mainContext.fetch(Voca.fetchRequest())
+            vocaList = fetchVocaList
+        } catch {
+            print("데이터를 가져오는 중 오류 발생: \(error)")
+            return nil
+        }
+        return vocaList
+    }
+    
+    // Read myVoca
+    func getMyVocaList() -> [MyVoca]? {
+        var myVocaList: [MyVoca] = []
+        
+        do {
+            let fetchMyVocaList = try mainContext.fetch(MyVoca.fetchRequest())
+            myVocaList = fetchMyVocaList
+        } catch {
+            print("데이터를 가져오는 중 오류 발생: \(error)")
+            return nil
+        }
+        return myVocaList
+    }
 }
 
 
