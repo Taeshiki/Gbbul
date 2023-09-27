@@ -36,7 +36,7 @@ class StudyViewController: BaseViewController {
     
     var bookId: Int64?
     
-    var testVocaList: [Int: TestVoca] = [:]
+    var testVocaList: [TestVoca] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -78,7 +78,7 @@ class StudyViewController: BaseViewController {
             getTestVocaList()
             
             for i in testVocaList {
-                addVocaView(index: i.key)
+                addVocaView(name: i.name)
             }
         }
     }
@@ -94,17 +94,18 @@ extension StudyViewController {
         // MyVoca
         if bookId <= 5000 {
             guard let myVocaList = manager.getMyVoca(by: bookId) else { return }
-            for (index, item) in myVocaList.enumerated() {
-                if let name = item.myVocaName, let mean = item.myVocaMean {
-                    testVocaList[index] = TestVoca(name: name, mean: mean)
+            for i in myVocaList {
+                if let name = i.myVocaName, let mean = i.myVocaMean {
+                    testVocaList.append(TestVoca(name: name, mean: mean))
                 }
             }
+            
         // Voca
         } else if bookId > 5000 {
             guard let vocaList = manager.getVoca(by: bookId) else { return }
-            for (index, item) in vocaList.enumerated() {
-                if let name = item.vocaName, let mean = item.vocaName {
-                    testVocaList[index] = TestVoca(name: name, mean: mean)
+            for i in vocaList {
+                if let name = i.vocaName, let mean = i.vocaMean {
+                    testVocaList.append(TestVoca(name: name, mean: mean))
                 }
             }
         }
@@ -113,12 +114,12 @@ extension StudyViewController {
 
 // MARK: - 단어 view 관련
 extension StudyViewController {
-    func addVocaView(index: Int) {
+    func addVocaView(name: String) {
         let vocaView = UIView()
         vocaView.backgroundColor = Palette.pink.getColor()
         
         let vocaLabel = UILabel()
-        vocaLabel.setUpLabel(title: testVocaList[index]?.name ?? "", fontSize: .medium)
+        vocaLabel.setUpLabel(title: name, fontSize: .medium)
         
         vocaView.addSubview(vocaLabel)
         vocaStackView.addArrangedSubview(vocaView)
@@ -186,7 +187,7 @@ extension StudyViewController {
                     self.getTestVocaList()
                     
                     for i in self.testVocaList {
-                        self.addVocaView(index: i.key)
+                        self.addVocaView(name: i.name)
                     }
                     
                     self.view.layoutIfNeeded()
