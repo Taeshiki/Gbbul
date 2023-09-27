@@ -21,6 +21,13 @@ class myVocaView: BaseViewController {
         return $0
     }(UILabel())
     
+    let editButton: UIButton = {
+        $0.setImage(UIImage(systemName: "pencil.circle.fill"), for: .normal)
+        $0.tintColor = Palette.purple.getColor()
+        $0.setTitleColor(Palette.white.getColor(), for: .normal)
+        return $0
+    }(UIButton())
+    
     let hiddenLabel: UILabel = {
         $0.setUpLabel(title: "단어를 추가 해주세요.", fontSize: .medium)
         return $0
@@ -62,6 +69,7 @@ class myVocaView: BaseViewController {
     
     func setUI() {
         view.addSubview(titleLabel)
+        view.addSubview(editButton)
         view.addSubview(floatingButton)
         view.addSubview(vocaTableView)
         view.addSubview(hiddenLabel)
@@ -75,6 +83,11 @@ class myVocaView: BaseViewController {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(ConstMargin.safeAreaTopMargin.getMargin())
             $0.left.equalTo(view.safeAreaLayoutGuide.snp.left).offset(ConstMargin.safeAreaLeftMargin.getMargin())
             $0.right.equalTo(view.safeAreaLayoutGuide.snp.right).offset(ConstMargin.safeAreaRightMargin.getMargin())
+        }
+        
+        editButton.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(25)
+            $0.left.equalTo(view.safeAreaLayoutGuide.snp.left).offset(90)
         }
         
         floatingButton.snp.makeConstraints {

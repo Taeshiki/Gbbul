@@ -21,9 +21,11 @@ class GbbulManager {
         return container
     }()
     
+    
     var mainContext: NSManagedObjectContext {
         return persistentContainer.viewContext
     }
+    
     
     func createUser(name : String) {
         guard let userEntity = NSEntityDescription.entity(forEntityName: "User", in: mainContext) else {
@@ -35,7 +37,8 @@ class GbbulManager {
         user.setValue(0, forKey: "level")
         saveContext()
     }
-  
+    
+    
     func getUser() -> [User]? {
         let fetchRequest: NSFetchRequest<User> = User.fetchRequest()
         do {
@@ -46,7 +49,8 @@ class GbbulManager {
             return nil
         }
     }
-  
+    
+    
     func saveContext() {
         if mainContext.hasChanges {
             do {
@@ -57,11 +61,11 @@ class GbbulManager {
         }
     }
     
+    
     func createMyBook(name: String, id: Int){
         guard let myBookEntity = NSEntityDescription.entity(forEntityName: "MyBook", in: mainContext) else {
             fatalError("MyBook Entity를 찾을 수 없습니다.")
         }
-        
         let myBook = NSManagedObject(entity: myBookEntity, insertInto: mainContext)
         
         let dateFormatter = DateFormatter()
@@ -75,7 +79,8 @@ class GbbulManager {
         
         saveContext()
     }
-  
+    
+    
     func getBook() -> [MyBook]? {
         var bookList: [MyBook] = []
         
@@ -88,6 +93,7 @@ class GbbulManager {
         }
         return bookList
     }
+    
     
     func createMyVoca(bookId: Int64, vocaName: String, vocaMean: String) {
         guard let myVocaEntity = NSEntityDescription.entity(forEntityName: "MyVoca", in: mainContext) else {
@@ -109,6 +115,32 @@ class GbbulManager {
         
         saveContext()
     }
+    
+    
+    func deleteMyBook(_ book: MyBook) {
+        mainContext.delete(book)
+        saveContext()
+    }
+    
+    
+    func deleteWordsInBook(_ book: MyBook) {
+        let bookId = book.bookId
+        
+        let fetchRequest: NSFetchRequest<MyVoca> = MyVoca.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "bookId == %lld", bookId)
+        
+        do {
+            let wordsToDelete = try mainContext.fetch(fetchRequest)
+            for word in wordsToDelete {
+                mainContext.delete(word)
+            }
+            saveContext()
+        } catch {
+            print("단어 삭제 중 오류 발생: \(error)")
+        }
+    }
+    
+    
 
     func getMyVoca(by bookId: Int64) -> [MyVoca]? {
         let fetchRequest: NSFetchRequest<MyVoca> = MyVoca.fetchRequest()
