@@ -7,6 +7,11 @@
 
 import UIKit
 
+struct TestVoca {
+    var name: String
+    var mean: String
+}
+
 class StudyViewController: BaseViewController {
     
     private lazy var titleLabel: UILabel = {
@@ -21,21 +26,27 @@ class StudyViewController: BaseViewController {
         return label
     }()
     
-    private lazy var vocaView: UIView = {
-        let view = UIView()
-        // 색깔 어떻게 할까..?? 버튼이랑 같은 느낌으로 갈까..
-        view.backgroundColor = Palette.pink.getColor()
+    private lazy var vocaStackView: UIStackView = {
+        let view = UIStackView()
         return view
     }()
+    
+    // MARK: - 변수
+    var manager = GbbulManager()
+    
+    var bookId: Int64?
+    
+    var testVocaList: [Int: TestVoca] = [:]
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
         setupTitleLabel()
         setupSubTitleLabel()
-        setupVocaView()
+        setupVocaStackView()
     }
     
+    // MARK: - UI Setup
     func setupTitleLabel() {
         view.addSubview(titleLabel)
         
@@ -54,20 +65,68 @@ class StudyViewController: BaseViewController {
         }
     }
     
-    func setupVocaView() {
-        view.addSubview(vocaView)
+    func setupVocaStackView() {
+        view.addSubview(vocaStackView)
         
-        vocaView.snp.makeConstraints { make in
-            //?? 마진값 어떻게 할까용
+        vocaStackView.snp.makeConstraints { make in
             make.top.equalTo(subTitleLabel.snp.bottom).offset(20)
             make.leading.equalTo(titleLabel.snp.leading)
-            make.width.height.equalTo(view.frame.width - ConstMargin.safeAreaLeftMargin.getMargin() - ConstMargin.safeAreaRightMargin.getMargin())
+            make.width.height.equalTo(view.frame.width
+                                      - ConstMargin.safeAreaLeftMargin.getMargin()
+                                      - ConstMargin.safeAreaRightMargin.getMargin())
+            
+            getTestVocaList()
+            
+            for i in testVocaList {
+                addVocaView(index: i.key)
+            }
         }
+    }
+}
+
+// MARK: - CoreData 관련
+extension StudyViewController {
+    
+    // MARK: 매니저에서 불러오는 함수 지금 틀렸으니까 나중에 수정 반드시 할 것!!!
+    func getTestVocaList() {
+        guard let bookId = bookId else { return }
+        
+        // MyVoca
+        if bookId <= 5000 {
+            guard let myVocaList = manager.getVoca(by: bookId) else { return }
+            for (index, item) in myVocaList.enumerated() {
+                if let name = item.myVocaName, let mean = item.myVocaMean {
+                    testVocaList[index] = TestVoca(name: name, mean: mean)
+                }
+            }
+        // Voca
+        } else if bookId > 5000 {
+            guard let myVocaList = manager.getVoca(by: bookId) else { return }
+            for (index, item) in myVocaList.enumerated() {
+                if let name = item.myVocaName, let mean = item.myVocaMean {
+                    testVocaList[index] = TestVoca(name: name, mean: mean)
+                }
+            }
+        }
+    }
+}
+
+// MARK: - 단어 view 관련
+extension StudyViewController {
+    func addVocaView(index: Int) {
+        let vocaView = UIView()
+        vocaView.backgroundColor = Palette.pink.getColor()
         
         let vocaLabel = UILabel()
-        vocaLabel.setUpLabel(title: "테스트 중", fontSize: .medium)
+        vocaLabel.setUpLabel(title: testVocaList[index]?.name ?? "", fontSize: .medium)
         
         vocaView.addSubview(vocaLabel)
+        vocaStackView.addSubview(vocaView)
+        
+        vocaView.snp.makeConstraints { make in
+            make.centerX.centerY.equalToSuperview()
+            make.width.height.equalToSuperview()
+        }
         
         vocaLabel.snp.makeConstraints { make in
             make.centerX.centerY.equalToSuperview()
@@ -77,7 +136,7 @@ class StudyViewController: BaseViewController {
         vocaView.addGestureRecognizer(gesture)
     }
     
-    
+    // MARK: 단어 view 넘기는 함수
     @objc func handlePanGesture(_ sender: UIPanGestureRecognizer) {
         // 움직일 view = vocaView
         guard let voca = sender.view else { return }

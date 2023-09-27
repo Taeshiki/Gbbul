@@ -134,7 +134,9 @@ class myVocaView: BaseViewController {
     }
     
     @objc func learnButtonTapped() {
-        
+        let studyViewController = StudyViewController()
+        studyViewController.bookId = selectedBookId
+        navigationController?.pushViewController(studyViewController, animated: false)
     }
 }
 
