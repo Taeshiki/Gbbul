@@ -93,7 +93,7 @@ extension StudyViewController {
         
         // MyVoca
         if bookId <= 5000 {
-            guard let myVocaList = manager.getVoca(by: bookId) else { return }
+            guard let myVocaList = manager.getMyVoca(by: bookId) else { return }
             for (index, item) in myVocaList.enumerated() {
                 if let name = item.myVocaName, let mean = item.myVocaMean {
                     testVocaList[index] = TestVoca(name: name, mean: mean)
@@ -101,7 +101,7 @@ extension StudyViewController {
             }
         // Voca
         } else if bookId > 5000 {
-            guard let myVocaList = manager.getVoca(by: bookId) else { return }
+            guard let myVocaList = manager.getMyVoca(by: bookId) else { return }
             for (index, item) in myVocaList.enumerated() {
                 if let name = item.myVocaName, let mean = item.myVocaMean {
                     testVocaList[index] = TestVoca(name: name, mean: mean)
