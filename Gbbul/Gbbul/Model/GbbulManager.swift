@@ -94,6 +94,21 @@ class GbbulManager {
         return bookList
     }
     
+    func updateMyBookName(newBookName: String, selectedBookId: Int64) {
+        let request = NSFetchRequest<MyBook>(entityName: "MyBook")
+        request.predicate = NSPredicate(format: "bookId == %ld", selectedBookId)
+        
+        do {
+            let fetchedBooks = try mainContext.fetch(request)
+            if let targetBook = fetchedBooks.first {
+                targetBook.myBookName = newBookName
+                saveContext()
+            }
+        } catch {
+            print("업데이트 실패: \(error.localizedDescription)")
+        }
+    }
+
     
     func createMyVoca(bookId: Int64, vocaName: String, vocaMean: String) {
         guard let myVocaEntity = NSEntityDescription.entity(forEntityName: "MyVoca", in: mainContext) else {
