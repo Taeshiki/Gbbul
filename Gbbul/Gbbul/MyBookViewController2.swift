@@ -102,7 +102,7 @@ class MyBookViewController2: BaseViewController {
     
     @objc func addButtonTapped() {
         if let newBookName = textField.text, !newBookName.isEmpty {
-            if let bookList = manager.getBook() {
+            if let bookList = manager.getMyBook() {
                 if bookList.count < 5000 {
                     if let lastBook = bookList.last {
                         let newId = lastBook.bookId + 1

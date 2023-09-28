@@ -27,6 +27,17 @@ class GbbulManager {
     }
     
     
+    func saveContext() {
+        if mainContext.hasChanges {
+            do {
+                try mainContext.save()
+            } catch {
+                print("저장 중 오류 발생: \(error)")
+            }
+        }
+    }
+    
+    
     func createUser(name : String) {
         guard let userEntity = NSEntityDescription.entity(forEntityName: "User", in: mainContext) else {
             fatalError("User 엔터티를 찾을 수 없습니다.")
@@ -51,17 +62,6 @@ class GbbulManager {
     }
     
     
-    func saveContext() {
-        if mainContext.hasChanges {
-            do {
-                try mainContext.save()
-            } catch {
-                print("저장 중 오류 발생: \(error)")
-            }
-        }
-    }
-    
-    
     func createMyBook(name: String, id: Int){
         guard let myBookEntity = NSEntityDescription.entity(forEntityName: "MyBook", in: mainContext) else {
             fatalError("MyBook Entity를 찾을 수 없습니다.")
@@ -81,7 +81,7 @@ class GbbulManager {
     }
     
     
-    func getBook() -> [MyBook]? {
+    func getMyBook() -> [MyBook]? {
         var bookList: [MyBook] = []
         
         do {
@@ -93,6 +93,7 @@ class GbbulManager {
         }
         return bookList
     }
+    
     
     func updateMyBookName(newBookName: String, selectedBookId: Int64) {
         let request = NSFetchRequest<MyBook>(entityName: "MyBook")
@@ -106,6 +107,30 @@ class GbbulManager {
             }
         } catch {
             print("업데이트 실패: \(error.localizedDescription)")
+        }
+    }
+    
+    
+    func deleteMyBook(_ book: MyBook) {
+        mainContext.delete(book)
+        saveContext()
+    }
+    
+    
+    func deleteWordsInBook(_ book: MyBook) {
+        let bookId = book.bookId
+        
+        let fetchRequest: NSFetchRequest<MyVoca> = MyVoca.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "bookId == %lld", bookId)
+        
+        do {
+            let wordsToDelete = try mainContext.fetch(fetchRequest)
+            for word in wordsToDelete {
+                mainContext.delete(word)
+            }
+            saveContext()
+        } catch {
+            print("단어 삭제 중 오류 발생: \(error)")
         }
     }
 
@@ -132,34 +157,12 @@ class GbbulManager {
     }
     
     
-    func deleteMyBook(_ book: MyBook) {
-        mainContext.delete(book)
-        saveContext()
-    }
-    
-    
-    func deleteWordsInBook(_ book: MyBook) {
-        let bookId = book.bookId
-        
-        let fetchRequest: NSFetchRequest<MyVoca> = MyVoca.fetchRequest()
-        fetchRequest.predicate = NSPredicate(format: "bookId == %lld", bookId)
-        
-        do {
-            let wordsToDelete = try mainContext.fetch(fetchRequest)
-            for word in wordsToDelete {
-                mainContext.delete(word)
-            }
-            saveContext()
-        } catch {
-            print("단어 삭제 중 오류 발생: \(error)")
-        }
-    }
-    
     func deleteMyVoca(myVoca: MyVoca) {
         mainContext.delete(myVoca)
         saveContext()
     }
 
+    
     func getMyVoca(by bookId: Int64) -> [MyVoca]? {
         let fetchRequest: NSFetchRequest<MyVoca> = MyVoca.fetchRequest()
         fetchRequest.predicate = NSPredicate(format: "bookId == %@", NSNumber(value: bookId))
@@ -173,6 +176,7 @@ class GbbulManager {
         }
     }
     
+    
     func getVoca(by bookId: Int64) -> [Voca]? {
         let fetchRequest: NSFetchRequest<Voca> = Voca.fetchRequest()
         fetchRequest.predicate = NSPredicate(format: "bookId == %@", NSNumber(value: bookId))
@@ -185,4 +189,6 @@ class GbbulManager {
             return nil
         }
     }
+    
+    
 }
