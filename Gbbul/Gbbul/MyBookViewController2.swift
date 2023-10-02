@@ -101,8 +101,8 @@ class MyBookViewController2: BaseViewController {
     
     
     @objc func addButtonTapped() {
-        if let newBookName = textField.text, !newBookName.isEmpty {
-            if let bookList = manager.getBook() {
+        if let newBookName = textField.text?.trimmingCharacters(in: .whitespaces), !newBookName.isEmpty {
+            if let bookList = manager.getMyBook() {
                 if bookList.count < 5000 {
                     if let lastBook = bookList.last {
                         let newId = lastBook.bookId + 1
@@ -114,10 +114,16 @@ class MyBookViewController2: BaseViewController {
                     print("5000개 넘었습니다.")
                 }
             }
+            textField.text = ""
+            self.navigationController?.popViewController(animated: true)
+        } else {
+            let alertController = UIAlertController(title: "알림", message: "단어장 이름을 입력하세요.", preferredStyle: .alert)
+            let okAction = UIAlertAction(title: "확인", style: .default, handler: nil)
+            alertController.addAction(okAction)
+            present(alertController, animated: true, completion: nil)
         }
-        textField.text = ""
-        self.navigationController?.popViewController(animated: true)
     }
+
 
 
     

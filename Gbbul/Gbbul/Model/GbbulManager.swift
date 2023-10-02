@@ -27,6 +27,17 @@ class GbbulManager {
     }
     
     
+    func saveContext() {
+        if mainContext.hasChanges {
+            do {
+                try mainContext.save()
+            } catch {
+                print("저장 중 오류 발생: \(error)")
+            }
+        }
+    }
+    
+    
     func createUser(name : String) {
         guard let userEntity = NSEntityDescription.entity(forEntityName: "User", in: mainContext) else {
             fatalError("User 엔터티를 찾을 수 없습니다.")
@@ -51,17 +62,6 @@ class GbbulManager {
     }
     
     
-    func saveContext() {
-        if mainContext.hasChanges {
-            do {
-                try mainContext.save()
-            } catch {
-                print("저장 중 오류 발생: \(error)")
-            }
-        }
-    }
-    
-    
     func createMyBook(name: String, id: Int){
         guard let myBookEntity = NSEntityDescription.entity(forEntityName: "MyBook", in: mainContext) else {
             fatalError("MyBook Entity를 찾을 수 없습니다.")
@@ -81,7 +81,7 @@ class GbbulManager {
     }
     
     
-    func getBook() -> [MyBook]? {
+    func getMyBook() -> [MyBook]? {
         var bookList: [MyBook] = []
         
         do {
@@ -95,25 +95,19 @@ class GbbulManager {
     }
     
     
-    func createMyVoca(bookId: Int64, vocaName: String, vocaMean: String) {
-        guard let myVocaEntity = NSEntityDescription.entity(forEntityName: "MyVoca", in: mainContext) else {
-            fatalError("MyVoca Entity를 찾을 수 없습니다.")
+    func updateMyBookName(newBookName: String, selectedBookId: Int64) {
+        let request = NSFetchRequest<MyBook>(entityName: "MyBook")
+        request.predicate = NSPredicate(format: "bookId == %ld", selectedBookId)
+        
+        do {
+            let fetchedBooks = try mainContext.fetch(request)
+            if let targetBook = fetchedBooks.first {
+                targetBook.myBookName = newBookName
+                saveContext()
+            }
+        } catch {
+            print("업데이트 실패: \(error.localizedDescription)")
         }
-        
-        let myVoca = NSManagedObject(entity: myVocaEntity, insertInto: mainContext)
-        
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-        let currentDate = Date()
-        let dateString = dateFormatter.string(from: currentDate)
-        
-        myVoca.setValue(bookId, forKey: "bookId")
-        myVoca.setValue(dateString, forKey: "myCreateDate")
-        myVoca.setValue(UUID().hashValue, forKey: "myVocaId")
-        myVoca.setValue(vocaName, forKey: "myVocaName")
-        myVoca.setValue(vocaMean, forKey: "myVocaMean")
-        
-        saveContext()
     }
     
     
@@ -139,12 +133,36 @@ class GbbulManager {
             print("단어 삭제 중 오류 발생: \(error)")
         }
     }
+
+    
+    func createMyVoca(bookId: Int64, vocaName: String, vocaMean: String) {
+        guard let myVocaEntity = NSEntityDescription.entity(forEntityName: "MyVoca", in: mainContext) else {
+            fatalError("MyVoca Entity를 찾을 수 없습니다.")
+        }
+        
+        let myVoca = NSManagedObject(entity: myVocaEntity, insertInto: mainContext)
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        let currentDate = Date()
+        let dateString = dateFormatter.string(from: currentDate)
+        
+        myVoca.setValue(bookId, forKey: "bookId")
+        myVoca.setValue(dateString, forKey: "myCreateDate")
+        myVoca.setValue(UUID().hashValue, forKey: "myVocaId")
+        myVoca.setValue(vocaName, forKey: "myVocaName")
+        myVoca.setValue(vocaMean, forKey: "myVocaMean")
+        
+        saveContext()
+    }
+    
     
     func deleteMyVoca(myVoca: MyVoca) {
         mainContext.delete(myVoca)
         saveContext()
     }
 
+    
     func getMyVoca(by bookId: Int64) -> [MyVoca]? {
         let fetchRequest: NSFetchRequest<MyVoca> = MyVoca.fetchRequest()
         fetchRequest.predicate = NSPredicate(format: "bookId == %@", NSNumber(value: bookId))
@@ -158,6 +176,7 @@ class GbbulManager {
         }
     }
     
+    
     func getVoca(by bookId: Int64) -> [Voca]? {
         let fetchRequest: NSFetchRequest<Voca> = Voca.fetchRequest()
         fetchRequest.predicate = NSPredicate(format: "bookId == %@", NSNumber(value: bookId))
@@ -170,4 +189,6 @@ class GbbulManager {
             return nil
         }
     }
+    
+    
 }

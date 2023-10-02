@@ -102,7 +102,7 @@ class MyBookViewController: BaseViewController {
         tableView.dataSource = self
         self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "BookCell")
         
-        if manager.getBook()!.isEmpty {
+        if manager.getMyBook()!.isEmpty {
             tableView.isHidden = true
         } else {
             tableView.isHidden = false
@@ -111,7 +111,6 @@ class MyBookViewController: BaseViewController {
     
     
     @objc func addBookButtonTapped(){
-        
         let nextVC = MyBookViewController2()
         self.navigationController?.pushViewController(nextVC, animated: true)
     }
@@ -126,7 +125,7 @@ extension MyBookViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        if let selectedBook = manager.getBook()?[indexPath.row] {
+        if let selectedBook = manager.getMyBook()?[indexPath.row] {
             let vocaView = myVocaView()
             
             vocaView.selectedBookTitle = selectedBook.myBookName
@@ -138,7 +137,7 @@ extension MyBookViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            if let book = manager.getBook()?[indexPath.row] {
+            if let book = manager.getMyBook()?[indexPath.row] {
                 manager.deleteWordsInBook(book)
                 manager.deleteMyBook(book)
             }
@@ -155,12 +154,12 @@ extension MyBookViewController: UITableViewDelegate {
 extension MyBookViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return manager.getBook()?.count ?? 0
+        return manager.getMyBook()?.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "BookCell", for: indexPath)
-        cell.textLabel?.text = manager.getBook()?[indexPath.row].myBookName
+        cell.textLabel?.text = manager.getMyBook()?[indexPath.row].myBookName
         cell.textLabel?.font = UIFont.systemFont(ofSize: LabelFontSize.medium.rawValue)
         return cell
     }
