@@ -69,17 +69,18 @@ class StudyViewController: BaseViewController {
         view.addSubview(vocaStackView)
         
         vocaStackView.snp.makeConstraints { make in
-            make.top.equalTo(subTitleLabel.snp.bottom).offset(20)
-            make.leading.equalTo(titleLabel.snp.leading)
-            make.width.height.equalTo(view.frame.width
+            make.top.equalTo(subTitleLabel.snp.bottom).offset(100)
+            make.centerX.equalToSuperview()
+            make.height.equalTo(view.frame.width
                                       - ConstMargin.safeAreaLeftMargin.getMargin()
                                       - ConstMargin.safeAreaRightMargin.getMargin())
-            
-            getTestVocaList()
-            
-            for i in testVocaList {
-                addVocaView(name: i.name)
-            }
+            make.width.equalTo(vocaStackView.snp.height).multipliedBy(0.6)
+        }
+        
+        getTestVocaList()
+        
+        for i in testVocaList {
+            addVocaView(name: i.name)
         }
     }
 }
@@ -123,9 +124,16 @@ extension StudyViewController {
     func addVocaView(name: String) {
         let vocaView = UIView()
         vocaView.backgroundColor = Palette.pink.getColor()
+        vocaView.layer.cornerRadius = 15
+        vocaView.layer.shadowColor = Palette.gray.getColor().cgColor
+        vocaView.layer.shadowOffset = CGSize(width: 2, height: 2)
+        vocaView.layer.shadowOpacity = 0.2
+        vocaView.layer.shadowRadius = 4.0
         
         let vocaLabel = UILabel()
-        vocaLabel.setUpLabel(title: name, fontSize: .medium)
+        vocaLabel.setUpLabel(title: name, fontSize: .large, titleColor: .black)
+        vocaLabel.numberOfLines = 0
+        vocaLabel.textAlignment = .center
         
         vocaView.addSubview(vocaLabel)
         vocaStackView.addArrangedSubview(vocaView)
@@ -137,6 +145,7 @@ extension StudyViewController {
         
         vocaLabel.snp.makeConstraints { make in
             make.centerX.centerY.equalToSuperview()
+            make.width.height.equalToSuperview()
         }
         
         let gesture = UIPanGestureRecognizer(target: self, action: #selector(handlePanGesture(_:)))
