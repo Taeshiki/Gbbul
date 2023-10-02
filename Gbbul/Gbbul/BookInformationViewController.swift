@@ -23,6 +23,13 @@ class BookInformationViewController: UIViewController {
     
     var vocaDatas: [Voca] = []
     
+    @objc func studyButtonTapped() {
+        let studyViewController = StudyViewController()
+        studyViewController.bookId = self.bookId
+        // 화면 전환
+        navigationController?.pushViewController(studyViewController, animated: true)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -34,14 +41,8 @@ class BookInformationViewController: UIViewController {
         // 버튼 생성
         let studyButton = UIButton()
         studyButton.translatesAutoresizingMaskIntoConstraints = false
+        studyButton.addTarget(self, action: #selector(studyButtonTapped), for: .touchUpInside)
         view.addSubview(studyButton)
-        
-        @objc func studyButtonTapped() {
-            let studyViewController = StudyViewController()
-
-            // 화면 전환
-            navigationController?.pushViewController(studyViewController, animated: true)
-        }
         
         //테이블뷰 설정
         tableView.delegate = self
