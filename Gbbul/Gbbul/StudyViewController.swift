@@ -200,7 +200,7 @@ extension StudyViewController {
         if vocaStackView.arrangedSubviews.count == 0 {
 
             let total: Double = correctCount + incorrectCount
-            let rate: Double = correctCount == 0.0 ? 0.0 : (total / correctCount * 100)
+            let rate: Double = correctCount == 0.0 ? 0.0 : (correctCount / total * 100)
 
             let message = """
                         정답 : \(Int(correctCount)) 개
@@ -229,7 +229,7 @@ extension StudyViewController {
     func addCorrectRate() {
         guard let bookId: Int64 = bookId else { return }
         let total: Double = correctCount + incorrectCount
-        let rate: Double = correctCount == 0.0 ? 0.0 : (total / correctCount * 100)
+        let rate: Double = correctCount == 0.0 ? 0.0 : (correctCount / total * 100)
         
         manager.createCorrectRate(by: bookId,
                                   correct: Int(correctCount),
