@@ -7,11 +7,9 @@
 
 import UIKit
 import CoreData
-import UserNotifications
 
 class MyBookViewController: BaseViewController {
     private var manager = GbbulManager()
-    let userNotificationCenter = UNUserNotificationCenter.current()
     
     private lazy var titleLabel = {
         let label = UILabel()
@@ -50,8 +48,6 @@ class MyBookViewController: BaseViewController {
         
         addSubView()
         makeConstraints()
-        setNotification()
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -112,11 +108,6 @@ class MyBookViewController: BaseViewController {
         }
     }
     
-    func setNotification(){
-        requestNotificationAuthorization()
-        pushNotification(title: "Gbbul", body: "오늘의 단어를 외워보세요!", seconds: 1, identifier: "test")
-    }
-    
     @objc func addBookButtonTapped(){
         let nextVC = MyBookViewController2()
         self.navigationController?.pushViewController(nextVC, animated: true)
@@ -174,37 +165,3 @@ extension MyBookViewController: UITableViewDataSource {
     
 }
 
-// MARK: - UNUserNotificationCenterDelegate
-
-extension MyBookViewController: UNUserNotificationCenterDelegate {
-    
-    func requestNotificationAuthorization() {
-        let authOptions: UNAuthorizationOptions = [.alert, .sound, .badge]
-
-        userNotificationCenter.requestAuthorization(options: authOptions) { success, error in
-            if let error = error {
-                print(error)
-            }
-        }
-    }
-    
-    
-    func pushNotification(title: String, body: String, seconds: Double, identifier: String) {
-        let notificationContent = UNMutableNotificationContent()
-        notificationContent.title = title
-        notificationContent.body = body
-
-        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: seconds, repeats: false)
-
-        let request = UNNotificationRequest(identifier: identifier,
-                                            content: notificationContent,
-                                            trigger: trigger)
-
-        UNUserNotificationCenter.current().add(request) { error in
-            if let error = error {
-                print("Notification Error: ", error)
-            }
-        }
-    }
-    
-}

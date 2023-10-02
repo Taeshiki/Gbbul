@@ -156,6 +156,39 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             gbbulManager.createVoca(bookId: 5009, vocaName: "dequeue", vocaMean: "대기열에서 꺼낸다")
         }
     }
+    
+    
+    func sceneWillResignActive(_ scene: UIScene) {
+        let manager = GbbulManager()
+        guard let vocas = manager.getVoca(by: Int64.random(in: 5001...5005)) else { return }
+        
+        let randomIndex = Int(arc4random_uniform(UInt32(vocas.count)))
+        let randomVoca = vocas[randomIndex]
+        
+        guard let name = randomVoca.vocaName else { return }
+        guard let mean = randomVoca.vocaMean else { return }
+        
+        let notificationContent = UNMutableNotificationContent()
+        notificationContent.title = "오늘의 단어 ☺️"
+        notificationContent.body = "\(name) :  \(mean)"
+        
+        let timeInterval: TimeInterval = 2
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: timeInterval, repeats: false)
+        
+        let identifier = "unique_identifier"
+        let request = UNNotificationRequest(identifier: identifier,
+                                            content: notificationContent,
+                                            trigger: trigger)
+        
+        UNUserNotificationCenter.current().add(request) { error in
+            if let error = error {
+                print("Notification Error: ", error)
+            }
+        }
+    }
+    
+    
+    
 }
 
 extension UITabBarController {
@@ -182,4 +215,5 @@ extension UITabBarController {
         
         self.modalPresentationStyle = .fullScreen
     }
+
 }
