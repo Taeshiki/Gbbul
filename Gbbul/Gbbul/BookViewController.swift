@@ -16,6 +16,17 @@ class BookViewController: UIViewController {
         return tableView
     }()
     
+    private let gbbulManager = GbbulManager()
+    
+    private var bookDataFromCoreData: [Book] = []
+    
+    func loadBookData() {
+        if let books = gbbulManager.getBook() {
+            bookDataFromCoreData = books
+            tableView.reloadData()
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -52,6 +63,7 @@ class BookViewController: UIViewController {
         // 라벨 생성
         bookViewTitleLabel.setUpLabel(title: "단어장 추가하기", fontSize: .large)
         
+        loadBookData()
     }
 }
 
@@ -59,34 +71,32 @@ extension BookViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // 테이블 뷰의 셀 개수 반환
-        return bookDatas.count // 원하는 개수로 변경하세요.
+        return bookDataFromCoreData.count // 원하는 개수로 변경하세요.
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         // 셀 구성 및 반환
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        let bookData = bookDatas[indexPath.row]
-        cell.textLabel?.text = bookData.BookName // 셀에 표시할 내용 설정
+        let bookData = bookDataFromCoreData[indexPath.row]
+        cell.textLabel?.text = bookData.bookName // 셀에 표시할 내용 설정
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let bookInfoViewController = BookInformationViewController()
-        navigationController?.pushViewController(bookInfoViewController, animated: true)
+        // 선택한 셀의 Book 데이터 가져오기
+        let selectedBook = bookDataFromCoreData[indexPath.row]
+        
+        // 선택한 책의 bookId 가져오기
+        let selectedBookId = selectedBook.bookId
+        if let selectedBookName = selectedBook.bookName {
+            let bookInfoViewController = BookInformationViewController()
+            
+            // 전환할 화면에 선택한 bookId 및 bookName 전달
+            bookInfoViewController.bookId = selectedBookId
+            bookInfoViewController.bookName = selectedBookName
+            
+            // 화면 전환
+            navigationController?.pushViewController(bookInfoViewController, animated: true)
+        }
     }
 }
-
-struct BookData{
-    let bookId : Int
-    let BookName : String
-    let CreateDate : String
-    
-}
-
-let bookDatas: [BookData] = [
-    BookData(bookId: 5001, BookName: "기초 영어단어 10", CreateDate: ""),
-    BookData(bookId: 5002, BookName: "기초 영어단어 20", CreateDate: ""),
-    BookData(bookId: 5003, BookName: "기초 영어단어 30", CreateDate: ""),
-    BookData(bookId: 5004, BookName: "기초 영어단어 40", CreateDate: ""),
-    BookData(bookId: 5005, BookName: "기초 영어단어 50", CreateDate: ""),
-]
