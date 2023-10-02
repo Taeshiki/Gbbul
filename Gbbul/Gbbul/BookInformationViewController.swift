@@ -9,11 +9,19 @@ import UIKit
 
 class BookInformationViewController: UIViewController {
     // 테이블뷰
+    
+    var bookId: Int64 = 0
+    var bookName: String = ""
+    
     private let tableView: UITableView = {
         let tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
         return tableView
     }()
+    
+    private let gbbulManager = GbbulManager()
+    
+    var vocaDatas: [Voca] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -64,8 +72,13 @@ class BookInformationViewController: UIViewController {
         
         
         // 라벨 생성
-        bookViewTitleLabel.setUpLabel(title: "cellId", fontSize: .large)
+        bookViewTitleLabel.setUpLabel(title: "\(bookName)", fontSize: .large)
         
+        if let vocas = gbbulManager.getVoca(by: bookId) {
+            vocaDatas = vocas
+            tableView.reloadData()
+        }
+
     }
 }
 
@@ -85,19 +98,3 @@ extension BookInformationViewController: UITableViewDataSource, UITableViewDeleg
     }
     
 }
-
-struct VocaData{
-    let bookId : Int
-    let vocaId : Int
-    let vocaName : String
-    let vocaMean : String
-    let createDate : String
-}
-
-let vocaDatas: [VocaData] = [
-    VocaData(bookId: 5001, vocaId: 5001, vocaName: "culture", vocaMean: "문화", createDate: ""),
-    VocaData(bookId: 5001, vocaId: 5002, vocaName: "experience", vocaMean: "경험", createDate: ""),
-    VocaData(bookId: 5001, vocaId: 5003, vocaName: "education", vocaMean: "교육", createDate: ""),
-    VocaData(bookId: 5001, vocaId: 5004, vocaName: "symbol", vocaMean: "상징", createDate: ""),
-    VocaData(bookId: 5001, vocaId: 5005, vocaName: "effect", vocaMean: "결과, 영향, 효과", createDate: ""),
-]
