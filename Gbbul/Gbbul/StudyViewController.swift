@@ -36,6 +36,9 @@ class StudyViewController: BaseViewController {
     var manager = GbbulManager()
     var bookId: Int64?
     var testVocaList: [TestVoca] = []
+    
+    var correctCount: Double = 0
+    var incorrectCount: Double = 0
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -90,7 +93,6 @@ extension StudyViewController {
     func getTestVocaList() {
         testVocaList = []
         guard let bookId = bookId else { return }
-        
         // MyVoca
         if bookId <= 5000 {
             guard let myVocaList = manager.getMyVoca(by: bookId) else { return }
@@ -163,6 +165,7 @@ extension StudyViewController {
             if (vocaView.center.x) > 200 {
                 UIView.animate(withDuration: 0.2) {
                     vocaView.center = CGPoint(x: vocaView.center.x, y: vocaView.center.y)
+                    self.correctCount += 1
                     self.remove(to: vocaView)
                 }
                 
@@ -170,6 +173,7 @@ extension StudyViewController {
             } else if vocaView.center.x < 100 {
                 UIView.animate(withDuration: 0.2) {
                     vocaView.center = CGPoint(x: vocaView.center.x, y: vocaView.center.y)
+                    self.incorrectCount += 1
                     self.remove(to: vocaView)
                 }
                 
@@ -194,7 +198,19 @@ extension StudyViewController {
         vocaStackView.removeArrangedSubview(vocaView)
         
         if vocaStackView.arrangedSubviews.count == 0 {
-            showAlertTwoButton(title: "학습을 완료했습니다", message: nil, button1Title: "재시험", button2Title: "확인", completion1: {
+
+            let total: Double = correctCount + incorrectCount
+            let rate: Double = correctCount == 0.0 ? 0.0 : (total / correctCount * 100)
+
+            let message = """
+                        정답 : \(Int(correctCount)) 개
+                        오답 : \(Int(incorrectCount)) 개
+                        정답률 : \(Int(rate)) %
+                        """
+            showAlertTwoButton(title: "학습을 완료했습니다", message: message, button1Title: "재시험", button2Title: "확인", completion1: {
+                self.correctCount = 0
+                self.incorrectCount = 0
+                
                 self.getTestVocaList()
                 
                 for i in self.testVocaList {
@@ -205,6 +221,20 @@ extension StudyViewController {
             }, completion2: {
                 self.navigationController?.popToRootViewController(animated: true)
             })
+            
+            addCorrectRate()
         }
+    }
+    
+    func addCorrectRate() {
+        guard let bookId: Int64 = bookId else { return }
+        let total: Double = correctCount + incorrectCount
+        let rate: Double = correctCount == 0.0 ? 0.0 : (total / correctCount * 100)
+        
+        manager.createCorrectRate(by: bookId,
+                                  correct: Int(correctCount),
+                                  incorrect: Int(incorrectCount),
+                                  rate: rate,
+                                  total: Int(total))
     }
 }
