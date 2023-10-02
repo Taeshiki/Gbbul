@@ -27,6 +27,24 @@ class StudyViewController: BaseViewController {
         return label
     }()
     
+    private lazy var correctLabel: UILabel = {
+        let label = UILabel()
+        label.setUpLabel(title: "알아요 →", fontSize: .large)
+        label.isHidden = true
+        let rotation: CGFloat = CGFloat.pi / 4
+        label.transform = CGAffineTransform(rotationAngle: rotation)
+        return label
+    }()
+    
+    private lazy var incorrectLabel: UILabel = {
+        let label = UILabel()
+        label.setUpLabel(title: "← 몰라요", fontSize: .large)
+        label.isHidden = true
+        let rotation: CGFloat = CGFloat.pi / 4
+        label.transform = CGAffineTransform(rotationAngle: -rotation)
+        return label
+    }()
+    
     private lazy var vocaStackView: UIStackView = {
         let view = UIStackView()
         return view
@@ -46,6 +64,8 @@ class StudyViewController: BaseViewController {
         setupTitleLabel()
         setupSubTitleLabel()
         setupVocaStackView()
+        setupIncorrectLabel()
+        setupCorrectLabel()
     }
     
     // MARK: - UI Setup
@@ -83,6 +103,24 @@ class StudyViewController: BaseViewController {
         
         for i in testVocaList {
             addVocaView(name: i.name)
+        }
+    }
+    
+    func setupCorrectLabel() {
+        view.addSubview(correctLabel)
+        
+        correctLabel.snp.makeConstraints { make in
+            make.bottom.equalTo(vocaStackView.snp.top)
+            make.leading.equalTo(vocaStackView.snp.trailing)
+        }
+    }
+    
+    func setupIncorrectLabel() {
+        view.addSubview(incorrectLabel)
+        
+        incorrectLabel.snp.makeConstraints { make in
+            make.bottom.equalTo(vocaStackView.snp.top)
+            make.trailing.equalTo(vocaStackView.snp.leading)
         }
     }
 }
@@ -165,6 +203,7 @@ extension StudyViewController {
             if (vocaView.center.x) > 200 {
                 UIView.animate(withDuration: 0.2) {
                     vocaView.center = CGPoint(x: vocaView.center.x, y: vocaView.center.y)
+                    self.correctLabel.isHidden = true
                     self.correctCount += 1
                     self.remove(to: vocaView)
                 }
@@ -173,6 +212,7 @@ extension StudyViewController {
             } else if vocaView.center.x < 100 {
                 UIView.animate(withDuration: 0.2) {
                     vocaView.center = CGPoint(x: vocaView.center.x, y: vocaView.center.y)
+                    self.incorrectLabel.isHidden = true
                     self.incorrectCount += 1
                     self.remove(to: vocaView)
                 }
@@ -181,12 +221,20 @@ extension StudyViewController {
                 UIView.animate(withDuration: 0.2) {
                     vocaView.transform = .identity
                     vocaView.center = centerOfVocaView
+                    self.correctLabel.isHidden = true
+                    self.incorrectLabel.isHidden = true
                 }
             }
             
         case .changed:
             let rotation = point.x / vocaView.frame.width
             vocaView.transform = CGAffineTransform(rotationAngle: rotation)
+            
+            if point.x > 0 {
+                correctLabel.isHidden = false
+            } else if point.x < 0 {
+                incorrectLabel.isHidden = false
+            }
             
         default:
             break
@@ -200,7 +248,7 @@ extension StudyViewController {
         if vocaStackView.arrangedSubviews.count == 0 {
 
             let total: Double = correctCount + incorrectCount
-            let rate: Double = correctCount == 0.0 ? 0.0 : (total / correctCount * 100)
+            let rate: Double = correctCount == 0.0 ? 0.0 : (correctCount / total * 100)
 
             let message = """
                         정답 : \(Int(correctCount)) 개
@@ -224,12 +272,15 @@ extension StudyViewController {
             
             addCorrectRate()
         }
+        
+        correctLabel.isHidden = true
+        incorrectLabel.isHidden = true
     }
     
     func addCorrectRate() {
         guard let bookId: Int64 = bookId else { return }
         let total: Double = correctCount + incorrectCount
-        let rate: Double = correctCount == 0.0 ? 0.0 : (total / correctCount * 100)
+        let rate: Double = correctCount == 0.0 ? 0.0 : (correctCount / total * 100)
         
         manager.createCorrectRate(by: bookId,
                                   correct: Int(correctCount),
