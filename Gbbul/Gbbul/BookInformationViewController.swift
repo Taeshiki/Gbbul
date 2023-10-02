@@ -9,11 +9,26 @@ import UIKit
 
 class BookInformationViewController: UIViewController {
     // 테이블뷰
+    
+    var bookId: Int64 = 0
+    var bookName: String = ""
+    
     private let tableView: UITableView = {
         let tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
         return tableView
     }()
+    
+    private let gbbulManager = GbbulManager()
+    
+    var vocaDatas: [Voca] = []
+    
+    @objc func studyButtonTapped() {
+        let studyViewController = StudyViewController()
+        studyViewController.bookId = self.bookId
+        // 화면 전환
+        navigationController?.pushViewController(studyViewController, animated: true)
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,6 +41,7 @@ class BookInformationViewController: UIViewController {
         // 버튼 생성
         let studyButton = UIButton()
         studyButton.translatesAutoresizingMaskIntoConstraints = false
+        studyButton.addTarget(self, action: #selector(studyButtonTapped), for: .touchUpInside)
         view.addSubview(studyButton)
         
         //테이블뷰 설정
@@ -64,8 +80,13 @@ class BookInformationViewController: UIViewController {
         
         
         // 라벨 생성
-        bookViewTitleLabel.setUpLabel(title: "cellId", fontSize: .large)
+        bookViewTitleLabel.setUpLabel(title: "\(bookName)", fontSize: .large)
         
+        if let vocas = gbbulManager.getVoca(by: bookId) {
+            vocaDatas = vocas
+            tableView.reloadData()
+        }
+
     }
 }
 
@@ -80,24 +101,13 @@ extension BookInformationViewController: UITableViewDataSource, UITableViewDeleg
         // 셀 구성 및 반환
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
         let vocaData = vocaDatas[indexPath.row]
-        cell.textLabel?.text = "\(vocaData.vocaName) : \(vocaData.vocaMean)"// 셀에 표시할 내용 설정
+        if let vocaName = vocaData.vocaName, let vocaMean = vocaData.vocaMean {
+                cell.textLabel?.text = "\(vocaName) : \(vocaMean)"
+            } else {
+                // 옵셔널 값이 nil인 경우 대체 텍스트나 다른 처리를 수행할 수 있습니다.
+                cell.textLabel?.text = "데이터 없음"
+            }
         return cell
     }
     
 }
-
-struct VocaData{
-    let bookId : Int
-    let vocaId : Int
-    let vocaName : String
-    let vocaMean : String
-    let createDate : String
-}
-
-let vocaDatas: [VocaData] = [
-    VocaData(bookId: 5001, vocaId: 5001, vocaName: "culture", vocaMean: "문화", createDate: ""),
-    VocaData(bookId: 5001, vocaId: 5002, vocaName: "experience", vocaMean: "경험", createDate: ""),
-    VocaData(bookId: 5001, vocaId: 5003, vocaName: "education", vocaMean: "교육", createDate: ""),
-    VocaData(bookId: 5001, vocaId: 5004, vocaName: "symbol", vocaMean: "상징", createDate: ""),
-    VocaData(bookId: 5001, vocaId: 5005, vocaName: "effect", vocaMean: "결과, 영향, 효과", createDate: ""),
-]

@@ -15,11 +15,7 @@ class myVocaView: BaseViewController {
     var gbbulManager = GbbulManager()
     var selectedBookTitle: String?
     var selectedBookId: Int64?
-    
-    //    let titleLabel: UILabel = {
-    //        $0.setUpLabel(title: "", fontSize: .large)
-    //        return $0
-    //    }(UILabel())
+    var tapGestureRecognizer: UITapGestureRecognizer!
     
     let titleTextField: UITextField = {
         $0.font = UIFont.boldSystemFont(ofSize: 25)
@@ -74,13 +70,11 @@ class myVocaView: BaseViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
         setTableView()
-        vocabularyData = gbbulManager.getMyVoca(by: selectedBookId!) ?? []
-        vocaTableView.reloadData()
     }
     
     func setUI() {
-        //        view.addSubview(titleLabel)
         view.addSubview(titleTextField)
         view.addSubview(editButton)
         view.addSubview(floatingButton)
@@ -88,17 +82,10 @@ class myVocaView: BaseViewController {
         view.addSubview(hiddenLabel)
         view.addSubview(learnButton)
         
-        //        titleLabel.text = selectedBookTitle
         titleTextField.text = selectedBookTitle
     }
     
     func setconstraints() {
-        //        titleLabel.snp.makeConstraints {
-        //            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(ConstMargin.safeAreaTopMargin.getMargin())
-        //            $0.left.equalTo(view.safeAreaLayoutGuide.snp.left).offset(ConstMargin.safeAreaLeftMargin.getMargin())
-        //            $0.right.equalTo(view.safeAreaLayoutGuide.snp.right).offset(-ConstMargin.safeAreaRightMargin.getMargin())
-        //        }
-        
         titleTextField.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(ConstMargin.safeAreaTopMargin.getMargin())
             $0.left.equalTo(view.safeAreaLayoutGuide.snp.left).offset(ConstMargin.safeAreaLeftMargin.getMargin())
@@ -154,6 +141,8 @@ class myVocaView: BaseViewController {
             vocaTableView.isHidden = false
             learnButton.isHidden = false
         }
+        
+        vocaTableView.reloadData()
     }
     
     func setButtonTarget() {
@@ -162,12 +151,15 @@ class myVocaView: BaseViewController {
         editButton.addTarget(self, action: #selector(editButtonTapped), for: .touchUpInside)
     }
     
-    func setTapGestureRecognizer(){
-        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(didTapView(_:)))
+    func setTapGestureRecognizer() {
+        tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(didTapView(_:)))
         view.addGestureRecognizer(tapGestureRecognizer)
+        tapGestureRecognizer.isEnabled = false
     }
     
-    func setTextField(){
+    func setTextField() {
+        tapGestureRecognizer.isEnabled = true
+        
         titleTextField.isUserInteractionEnabled = true
         titleTextField.borderStyle = .roundedRect
         titleTextField.layer.borderWidth = 1
@@ -187,7 +179,6 @@ class myVocaView: BaseViewController {
         studyViewController.bookId = selectedBookId
         navigationController?.pushViewController(studyViewController, animated: false)
     }
-    
     
     @objc func editButtonTapped() {
         setTextField()
@@ -209,12 +200,10 @@ class myVocaView: BaseViewController {
             return
         }
         gbbulManager.updateMyBookName(newBookName: newTitle, selectedBookId: bookId)
-                
+        
+        tapGestureRecognizer.isEnabled = false
     }
-
 }
-
-
 
 extension myVocaView: UITableViewDelegate {
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
@@ -248,7 +237,15 @@ extension myVocaView: UITableViewDelegate {
         
         let confirmAction = UIAlertAction(title: "확인", style: .default) { _ in
             guard let newName = alertController.textFields?[0].text,
-                  let newMean = alertController.textFields?[1].text else {
+                  let newMean = alertController.textFields?[1].text,
+                  !newName.trimmingCharacters(in: .whitespaces).isEmpty,
+                  !newMean.trimmingCharacters(in: .whitespaces).isEmpty else {
+                
+                alertController.textFields?[0].placeholder = "단어를 입력해 주세요."
+                alertController.textFields?[1].placeholder = "의미를 입력해 주세요."
+                
+                self.present(alertController, animated: true)
+                
                 return
             }
             
@@ -258,7 +255,9 @@ extension myVocaView: UITableViewDelegate {
             self.vocaTableView.reloadData()
         }
         
-        let cancelAction = UIAlertAction(title: "취소", style: .cancel, handler: nil)
+        let cancelAction = UIAlertAction(title: "취소", style: .cancel) { _ in
+            self.vocaTableView.reloadData()
+        }
         
         alertController.addAction(confirmAction)
         alertController.addAction(cancelAction)

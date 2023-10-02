@@ -190,6 +190,7 @@ class GbbulManager {
         }
     }
     
+
     func createCorrectRate(by bookId: Int64, correct: Int, incorrect: Int, rate: Double, total: Int) {
         guard let correctRateEntity = NSEntityDescription.entity(forEntityName: "CorrectRate", in: mainContext) else {
             fatalError("CorrectRate Entity를 찾을 수 없습니다.")
@@ -205,16 +206,56 @@ class GbbulManager {
         
         saveContext()
     }
+
+    func createBook(bookName: String, bookId: Int){
+        guard let BookEntity = NSEntityDescription.entity(forEntityName: "Book", in: mainContext) else {
+            fatalError("Book Entity를 찾을 수 없습니다.")
+        }
+        let Book = NSManagedObject(entity: BookEntity, insertInto: mainContext)
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        let currentDate = Date()
+        let dateString = dateFormatter.string(from: currentDate)
+        
+        Book.setValue(bookId, forKey: "bookId")
+        Book.setValue(bookName, forKey: "bookName")
+        Book.setValue(dateString, forKey: "createDate")
+        
+        saveContext()
+    }
     
-    func getCorrectRate() -> [CorrectRate]? {
-        let fetchRequest: NSFetchRequest<CorrectRate> = CorrectRate.fetchRequest()
+    func createVoca(bookId: Int64, vocaName: String, vocaMean: String) {
+        guard let VocaEntity = NSEntityDescription.entity(forEntityName: "Voca", in: mainContext) else {
+            fatalError("Voca Entity를 찾을 수 없습니다.")
+        }
+        
+        let Voca = NSManagedObject(entity: VocaEntity, insertInto: mainContext)
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        let currentDate = Date()
+        let dateString = dateFormatter.string(from: currentDate)
+        
+        Voca.setValue(bookId, forKey: "bookId")
+        Voca.setValue(dateString, forKey: "createDate")
+        Voca.setValue(UUID().hashValue, forKey: "vocaId")
+        Voca.setValue(vocaName, forKey: "vocaName")
+        Voca.setValue(vocaMean, forKey: "vocaMean")
+        
+        saveContext()
+    }
+    
+    func getBook() -> [Book]? {
+        var bookList: [Book] = []
         
         do {
-            let rate = try mainContext.fetch(fetchRequest)
-            return rate
+            let fetchBookList = try mainContext.fetch(Book.fetchRequest())
+            bookList = fetchBookList
         } catch {
             print("데이터를 가져오는 중 오류 발생: \(error)")
             return nil
         }
+        return bookList
     }
 }
