@@ -36,6 +36,13 @@ class BookInformationViewController: UIViewController {
         studyButton.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(studyButton)
         
+        @objc func studyButtonTapped() {
+            let studyViewController = StudyViewController()
+
+            // 화면 전환
+            navigationController?.pushViewController(studyViewController, animated: true)
+        }
+        
         //테이블뷰 설정
         tableView.delegate = self
         tableView.dataSource = self
@@ -93,7 +100,12 @@ extension BookInformationViewController: UITableViewDataSource, UITableViewDeleg
         // 셀 구성 및 반환
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
         let vocaData = vocaDatas[indexPath.row]
-        cell.textLabel?.text = "\(vocaData.vocaName) : \(vocaData.vocaMean)"// 셀에 표시할 내용 설정
+        if let vocaName = vocaData.vocaName, let vocaMean = vocaData.vocaMean {
+                cell.textLabel?.text = "\(vocaName) : \(vocaMean)"
+            } else {
+                // 옵셔널 값이 nil인 경우 대체 텍스트나 다른 처리를 수행할 수 있습니다.
+                cell.textLabel?.text = "데이터 없음"
+            }
         return cell
     }
     
