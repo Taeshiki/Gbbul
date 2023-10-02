@@ -237,7 +237,17 @@ extension myVocaView: UITableViewDelegate {
         
         let confirmAction = UIAlertAction(title: "확인", style: .default) { _ in
             guard let newName = alertController.textFields?[0].text,
-                  let newMean = alertController.textFields?[1].text else { return }
+                  let newMean = alertController.textFields?[1].text,
+                  !newName.trimmingCharacters(in: .whitespaces).isEmpty,
+                  !newMean.trimmingCharacters(in: .whitespaces).isEmpty else {
+                
+                alertController.textFields?[0].placeholder = "단어를 입력해 주세요."
+                alertController.textFields?[1].placeholder = "의미를 입력해 주세요."
+                
+                self.present(alertController, animated: true)
+                
+                return
+            }
             
             selectedVoca.setValue(newName, forKey: "myVocaName")
             selectedVoca.setValue(newMean, forKey: "myVocaMean")
