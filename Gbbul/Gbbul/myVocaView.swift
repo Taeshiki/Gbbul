@@ -15,6 +15,7 @@ class myVocaView: BaseViewController {
     var gbbulManager = GbbulManager()
     var selectedBookTitle: String?
     var selectedBookId: Int64?
+    var tapGestureRecognizer: UITapGestureRecognizer!
     
     //    let titleLabel: UILabel = {
     //        $0.setUpLabel(title: "", fontSize: .large)
@@ -163,11 +164,14 @@ class myVocaView: BaseViewController {
     }
     
     func setTapGestureRecognizer(){
-        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(didTapView(_:)))
+        tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(didTapView(_:)))
         view.addGestureRecognizer(tapGestureRecognizer)
+        tapGestureRecognizer.isEnabled = false
     }
     
     func setTextField(){
+        tapGestureRecognizer.isEnabled = true
+
         titleTextField.isUserInteractionEnabled = true
         titleTextField.borderStyle = .roundedRect
         titleTextField.layer.borderWidth = 1
@@ -209,9 +213,9 @@ class myVocaView: BaseViewController {
             return
         }
         gbbulManager.updateMyBookName(newBookName: newTitle, selectedBookId: bookId)
-                
+        
+        tapGestureRecognizer.isEnabled = false
     }
-
 }
 
 
