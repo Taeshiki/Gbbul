@@ -255,7 +255,9 @@ extension myVocaView: UITableViewDelegate {
             self.vocaTableView.reloadData()
         }
         
-        let cancelAction = UIAlertAction(title: "취소", style: .cancel, handler: nil)
+        let cancelAction = UIAlertAction(title: "취소", style: .cancel) { _ in
+            self.vocaTableView.reloadData()
+        }
         
         alertController.addAction(confirmAction)
         alertController.addAction(cancelAction)
