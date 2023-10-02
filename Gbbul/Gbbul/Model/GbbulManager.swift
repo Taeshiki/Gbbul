@@ -190,6 +190,23 @@ class GbbulManager {
         }
     }
     
+
+    func createCorrectRate(by bookId: Int64, correct: Int, incorrect: Int, rate: Double, total: Int) {
+        guard let correctRateEntity = NSEntityDescription.entity(forEntityName: "CorrectRate", in: mainContext) else {
+            fatalError("CorrectRate Entity를 찾을 수 없습니다.")
+        }
+        
+        let correctRate = NSManagedObject(entity: correctRateEntity, insertInto: mainContext)
+        
+        correctRate.setValue(bookId, forKey: "bookId")
+        correctRate.setValue(correct, forKey: "correct")
+        correctRate.setValue(incorrect, forKey: "incorrect")
+        correctRate.setValue(rate, forKey: "rate")
+        correctRate.setValue(total, forKey: "total")
+        
+        saveContext()
+    }
+
     func createBook(bookName: String, bookId: Int){
         guard let BookEntity = NSEntityDescription.entity(forEntityName: "Book", in: mainContext) else {
             fatalError("Book Entity를 찾을 수 없습니다.")
@@ -241,5 +258,4 @@ class GbbulManager {
         }
         return bookList
     }
-    
 }
