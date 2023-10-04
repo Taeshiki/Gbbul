@@ -55,8 +55,7 @@ class BookInformationViewController: UIViewController {
         tableView.layer.cornerRadius = 10
         
         // 제약 조건 - 라벨 위에 테이블 뷰 추가
-        bookViewTitleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        bookViewTitleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: ConstMargin.safeAreaTopMargin.getMargin()).isActive = true
+
         
         // 테이블 뷰 제약 조건 설정
         view.addSubview(tableView)
@@ -74,13 +73,15 @@ class BookInformationViewController: UIViewController {
         // 버튼 제약조건
         studyButton.topAnchor.constraint(equalTo: tableView.bottomAnchor, constant: -20).isActive = true
         studyButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        studyButton.widthAnchor.constraint(equalToConstant: 100).isActive = true
+        studyButton.widthAnchor.constraint(equalTo : tableView.widthAnchor).isActive = true
         studyButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
         studyButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -ConstMargin.safeAreaBottomMargin.getMargin()).isActive = true
         
         
         // 라벨 생성
         bookViewTitleLabel.setUpLabel(title: "\(bookName)", fontSize: .large)
+        bookViewTitleLabel.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: ConstMargin.safeAreaLeftMargin.getMargin()).isActive = true
+        bookViewTitleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: ConstMargin.safeAreaTopMargin.getMargin()).isActive = true
         
         if let vocas = gbbulManager.getVoca(by: bookId) {
             vocaDatas = vocas
@@ -99,10 +100,13 @@ extension BookInformationViewController: UITableViewDataSource, UITableViewDeleg
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         // 셀 구성 및 반환
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+        let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "cell")
         let vocaData = vocaDatas[indexPath.row]
+        
+        cell.textLabel?.font = UIFont.systemFont(ofSize: LabelFontSize.smallMedium.rawValue)
         if let vocaName = vocaData.vocaName, let vocaMean = vocaData.vocaMean {
-                cell.textLabel?.text = "\(vocaName) : \(vocaMean)"
+                cell.textLabel?.text = "\(vocaName)"
+                cell.detailTextLabel?.text = "\(vocaMean)"
             } else {
                 // 옵셔널 값이 nil인 경우 대체 텍스트나 다른 처리를 수행할 수 있습니다.
                 cell.textLabel?.text = "데이터 없음"

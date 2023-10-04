@@ -20,12 +20,12 @@ class myVocaView2: BaseViewController {
     }(UILabel())
     
     let vocaNameLabel: UILabel = {
-        $0.setUpLabel(title: "단어", fontSize: .medium)
+        $0.setUpLabel(title: "단어", fontSize: .medium, titleColor: .lightGray)
         return $0
     }(UILabel())
     
     let vocaMeanLabel: UILabel = {
-        $0.setUpLabel(title: "의미", fontSize: .medium)
+        $0.setUpLabel(title: "의미", fontSize: .medium, titleColor: .lightGray)
         return $0
     }(UILabel())
     
@@ -95,7 +95,8 @@ class myVocaView2: BaseViewController {
         addButton.snp.makeConstraints {
             $0.top.equalTo(vocaMeanTextField.snp.bottom).offset(20)
             $0.centerX.equalToSuperview()
-            $0.width.equalTo(140)
+            $0.width.equalTo(vocaMeanTextField.snp.width)
+            $0.height.equalTo(40)
         }
     }
     

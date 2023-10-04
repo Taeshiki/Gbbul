@@ -158,7 +158,7 @@ extension MyBookViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "BookCell", for: indexPath)
         cell.textLabel?.text = manager.getMyBook()?[indexPath.row].myBookName
-        cell.textLabel?.font = UIFont.systemFont(ofSize: LabelFontSize.medium.rawValue)
+        cell.textLabel?.font = UIFont.systemFont(ofSize: LabelFontSize.smallMedium.rawValue)
         return cell
     }
     

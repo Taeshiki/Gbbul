@@ -28,7 +28,7 @@ class myVocaView: BaseViewController {
     
     let editButton: UIButton = {
         let image = UIImage(systemName: "pencil.circle.fill")
-        let resizedImage = $0.resizeImageButton(image: image, width: 60, height: 60, color: Palette.purple.getColor())
+        let resizedImage = $0.resizeImageButton(image: image, width: 60, height: 60, color: Palette.boldPink.getColor())
         $0.setImage(resizedImage, for: .normal)
         $0.tintColor = Palette.purple.getColor()
         $0.setTitleColor(Palette.white.getColor(), for: .normal)
@@ -46,15 +46,16 @@ class myVocaView: BaseViewController {
     }(UIButton())
     
     let floatingButton: UIButton = {
-        $0.setTitle("+", for: .normal)
-        $0.backgroundColor = Palette.pink.getColor()
-        $0.layer.cornerRadius = 30
-        $0.clipsToBounds = true
+        let image = UIImage(systemName: "plus.circle")
+        let resizedImage = $0.resizeImageButton(image: image, width: 60, height: 60, color: Palette.boldPink.getColor())
+        $0.setImage(resizedImage, for: .normal)
+        $0.tintColor = Palette.purple.getColor()
+        $0.setTitleColor(Palette.white.getColor(), for: .normal)
         return $0
     }(UIButton(type: .custom))
     
     let vocaTableView: UITableView = {
-        $0.setUpTableView()
+        $0.setUpTableView(borderColor : .purple)
         return $0
     }(UITableView())
     
@@ -110,6 +111,7 @@ class myVocaView: BaseViewController {
             $0.left.equalToSuperview().offset(20)
             $0.right.equalToSuperview().offset(-20)
             $0.bottom.equalTo(learnButton.snp.top).offset(-20)
+        
         }
         
         hiddenLabel.snp.makeConstraints {
@@ -119,7 +121,8 @@ class myVocaView: BaseViewController {
         
         learnButton.snp.makeConstraints {
             $0.bottom.equalTo(floatingButton.snp.top).offset(-20)
-            $0.width.equalTo(180)
+            $0.width.equalTo(vocaTableView.snp.width)
+            $0.height.equalTo(40)
             $0.centerX.equalToSuperview()
         }
     }

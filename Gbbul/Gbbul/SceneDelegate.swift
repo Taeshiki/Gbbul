@@ -207,8 +207,11 @@ extension UITabBarController {
         myPageViewController.tabBarItem = UITabBarItem(title: "마이페이지", image: myPageIcon, tag: 2)
         
         let bookNavController = UINavigationController(rootViewController: bookViewController)
+        bookNavController.navigationBar.tintColor = Palette.gray.getColor()
         let myBookNavController = UINavigationController(rootViewController: myBookViewController)
+        myBookNavController.navigationBar.tintColor = Palette.gray.getColor()
         let myPageNavController = UINavigationController(rootViewController: myPageViewController)
+        myPageNavController.navigationBar.tintColor = Palette.gray.getColor()
 
         viewControllers = [bookNavController, myBookNavController, myPageNavController]
         tabBar.tintColor = .black

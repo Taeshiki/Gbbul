@@ -8,7 +8,7 @@
 import UIKit
 
 extension UIButton {
-    func setUpButton(title: String, titleSize : CGFloat = 20.0 ,titleColor : Palette = .white,backgroundColor: Palette = .boldPink) {
+    func setUpButton(title: String, titleSize : CGFloat = 20.0 ,titleColor : Palette = .white ,backgroundColor: Palette = .purple) {
         self.layer.cornerRadius = 10
         self.layer.masksToBounds = true
         self.backgroundColor = backgroundColor.getColor()
@@ -31,7 +31,7 @@ extension UIButton {
 }
 
 extension UILabel {
-    func setUpLabel(title: String, fontSize: LabelFontSize, isFontBold: Bool = true, titleColor: Palette = .purple) {
+    func setUpLabel(title: String, fontSize: LabelFontSize, isFontBold: Bool = true, titleColor: Palette = .gray) {
         self.text = title
         self.font = isFontBold ? UIFont.boldSystemFont(ofSize: fontSize.rawValue) : UIFont.systemFont(ofSize: fontSize.rawValue)
         let titleColor = titleColor.getColor()
@@ -39,7 +39,7 @@ extension UILabel {
     }
 }
 extension UITextField{
-    func setUpTextField(borderColor : Palette = .boldPink, borderWidth : CGFloat = 1.0){
+    func setUpTextField(borderColor : Palette = .purple, borderWidth : CGFloat = 1.0){
         self.layer.cornerRadius = 10
         self.layer.masksToBounds = true
         self.layer.borderWidth = borderWidth
@@ -119,6 +119,7 @@ enum Palette {
     case lightYellow
     case lightBlack //큰타이틀용?
     case lightGray //소제목용?
+    case lightGrayTest //소제목용?
     case gray // 텍스트용?
     case black
     
@@ -142,12 +143,14 @@ enum Palette {
             return UIColor(red: 32/255, green: 32/255, blue: 32/255, alpha: 1)
         case .lightGray:
             return UIColor(red: 64/255, green: 64/255, blue: 64/255, alpha: 1)
+        case .lightGrayTest:
+            return UIColor(red: 64/255, green: 64/255, blue: 64/255, alpha: 0.8)
         case .gray:
             return UIColor(red: 128/255, green: 128/255, blue: 128/255, alpha: 1)
         case .lightBlue:
             return UIColor(red: 51/255, green: 153/255, blue: 255/255, alpha: 1)
         case .lightRed:
-            return UIColor(red: 255/255, green: 102/255, blue: 102/255, alpha: 1)
+            return UIColor(red: 64/255, green: 64/255, blue: 64/255, alpha: 0.5)
         case .black:
             return UIColor(red: 0/255, green: 0/255, blue: 0/255, alpha: 1)
         }
@@ -155,6 +158,7 @@ enum Palette {
 }
 enum LabelFontSize: CGFloat {
     case small = 10
+    case smallMedium = 15
     case medium = 18
     case large = 25
 }

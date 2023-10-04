@@ -57,11 +57,11 @@ class BookViewController: UIViewController {
         tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -ConstMargin.safeAreaRightMargin.getMargin()).isActive = true
         tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -ConstMargin.safeAreaBottomMargin.getMargin()).isActive = true
         // 제약 조건
-        bookViewTitleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         bookViewTitleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: ConstMargin.safeAreaTopMargin.getMargin()).isActive = true
+        bookViewTitleLabel.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: ConstMargin.safeAreaLeftMargin.getMargin()).isActive = true
         
         // 라벨 생성
-        bookViewTitleLabel.setUpLabel(title: "단어장 추가하기", fontSize: .large)
+        bookViewTitleLabel.setUpLabel(title: "단어 공유소", fontSize: .large)
         
         loadBookData()
     }
@@ -78,7 +78,9 @@ extension BookViewController: UITableViewDataSource, UITableViewDelegate {
         // 셀 구성 및 반환
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
         let bookData = bookDataFromCoreData[indexPath.row]
+        
         cell.textLabel?.text = bookData.bookName // 셀에 표시할 내용 설정
+        cell.textLabel?.font = UIFont.systemFont(ofSize: LabelFontSize.smallMedium.rawValue)
         return cell
     }
     

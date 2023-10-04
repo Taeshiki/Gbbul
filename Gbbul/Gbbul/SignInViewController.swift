@@ -32,7 +32,7 @@ enum LayoutMultiplier: CGFloat {
 class SignInViewController: BaseViewController {
     private lazy var titleLabel : UILabel = {
         let titleLabel = UILabel()
-        titleLabel.setUpLabel(title: "어서오세요", fontSize: .large)
+        titleLabel.setUpLabel(title: "Hello Gbbul!", fontSize: .large)
         return titleLabel
     }()
     private lazy var nicknameLabel : UILabel = {
@@ -75,24 +75,28 @@ class SignInViewController: BaseViewController {
     private func configUI(){
         [titleLabel,nicknameLabel,inputTextField,confirmButton].forEach(view.addSubview)
         titleLabel.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(ConstMargin.safeAreaTopMargin.getMargin())
-            $0.leading.equalTo(view.safeAreaLayoutGuide.snp.leading).offset(ConstMargin.safeAreaLeftMargin.getMargin())
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(ConstMargin.safeAreaTopMargin.getMargin()).offset(200)
+            $0.centerX.equalToSuperview()
         }
         nicknameLabel.snp.makeConstraints {
             $0.leading.equalTo(titleLabel.snp.leading)
-            $0.top.equalTo(titleLabel.snp.bottom).offset(40)
+            $0.top.equalTo(titleLabel.snp.bottom).offset(20)
         }
+        titleLabel.isHidden = false
+        nicknameLabel.isHidden = true
+        inputTextField.isHidden = false
+        confirmButton.isHidden = false
         inputTextField.snp.makeConstraints {
             $0.top.equalTo(nicknameLabel.snp.bottom).offset(10)
-            $0.leading.equalTo(titleLabel.snp.leading)
+            $0.leading.equalTo(view.safeAreaLayoutGuide.snp.leading).offset(ConstMargin.safeAreaLeftMargin.getMargin())
             $0.trailing.equalTo(view.safeAreaLayoutGuide.snp.trailing).offset(-ConstMargin.safeAreaLeftMargin.getMargin())
             $0.height.equalToSuperview().multipliedBy(LayoutMultiplier.extraSmall.getScale())
         }
         confirmButton.snp.makeConstraints {
             $0.centerX.equalTo(inputTextField)
             $0.top.equalTo(inputTextField.snp.bottom).offset(20)
-            $0.width.equalTo(inputTextField.snp.width).multipliedBy(LayoutMultiplier.half.getScale())
             $0.height.equalTo(inputTextField.snp.height)
+            $0.width.equalTo(inputTextField.snp.width)
         }
     }
 }

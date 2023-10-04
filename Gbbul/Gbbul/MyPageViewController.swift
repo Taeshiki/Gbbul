@@ -48,7 +48,7 @@ class MyPageViewController: BaseViewController {
         ratingStackView.distribution = .fillEqually
         for _ in 1...5 {
             let ratingView = UIView()
-            ratingView.setUpView(borderColor : .purple, borderWidth: 1)
+            ratingView.setUpView(borderColor : .boldPink, borderWidth: 1)
             ratingStackView.addArrangedSubview(ratingView)
         }
         view.addSubview(ratingStackView)
@@ -59,7 +59,7 @@ class MyPageViewController: BaseViewController {
     }()
     private lazy var bookTableView : UITableView = {
         let bookTableView = UITableView()
-        bookTableView.setUpTableView(borderColor : .lightBlue)
+        bookTableView.setUpTableView(borderColor : .boldPink)
         bookTableView.delegate = self
         bookTableView.dataSource = self
         bookTableView.register(MyPageCustomCell.self, forCellReuseIdentifier: "MyPageCustomCell")
@@ -271,17 +271,17 @@ extension MyPageViewController : UITableViewDelegate, UITableViewDataSource
     
     private func deleteBookItemAndReloadData(at indexPath: IndexPath) async throws{
         await manager.deleteMyBookItem(bookId: Int64(bookData[indexPath.row].bookId))
-        await loadMyPageData()
+        loadMyPageData()
     }
     private func configCellStyle(_ cell: MyPageCustomCell, bookName: String, bookId: Int, rate: Int) {
         cell.titleLabel.text = bookName
         cell.correctRateLabel.text = "정답률 \(String(rate))%"
         if rate == 100 {
-            cell.correctRateLabel.textColor = Palette.lightBlue.getColor()
-        } else if (rate >= 40 && rate < 100) {
             cell.correctRateLabel.textColor = Palette.lightGray.getColor()
+        } else if (rate >= 40 && rate < 100) {
+            cell.correctRateLabel.textColor = Palette.lightGrayTest.getColor()
         } else {
-            cell.correctRateLabel.textColor = Palette.red.getColor()
+            cell.correctRateLabel.textColor = Palette.lightRed.getColor()
         }
     }
 }
@@ -290,13 +290,13 @@ class MyPageCustomCell : UITableViewCell
 {
     var titleLabel : UILabel = {
         let titleLabel = UILabel()
-        titleLabel.setUpLabel(title: "", fontSize: .medium, isFontBold:  false, titleColor: .lightGray)
+        titleLabel.setUpLabel(title: "", fontSize: .smallMedium, isFontBold:  false, titleColor: .lightGray)
         titleLabel.textAlignment = .left
         return titleLabel
     }()
     var correctRateLabel : UILabel = {
         let correctRateLabel = UILabel()
-        correctRateLabel.setUpLabel(title: "", fontSize: .medium, isFontBold:  false, titleColor: .lightGray)
+        correctRateLabel.setUpLabel(title: "", fontSize: .smallMedium, isFontBold:  false, titleColor: .lightGray)
         correctRateLabel.textAlignment = .right
         return correctRateLabel
     }()

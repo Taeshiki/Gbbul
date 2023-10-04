@@ -169,7 +169,7 @@ extension StudyViewController {
         vocaView.layer.shadowRadius = 4.0
         
         let vocaLabel = UILabel()
-        vocaLabel.setUpLabel(title: name, fontSize: .large, titleColor: .black)
+        vocaLabel.setUpLabel(title: name, fontSize: .medium, titleColor: .lightGray)
         vocaLabel.numberOfLines = 0
         vocaLabel.textAlignment = .center
         
