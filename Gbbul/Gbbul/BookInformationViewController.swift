@@ -103,7 +103,6 @@ extension BookInformationViewController: UITableViewDataSource, UITableViewDeleg
         let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "cell")
         let vocaData = vocaDatas[indexPath.row]
         
-        cell.textLabel?.font = UIFont.systemFont(ofSize: LabelFontSize.smallMedium.rawValue)
         if let vocaName = vocaData.vocaName, let vocaMean = vocaData.vocaMean {
                 cell.textLabel?.text = "\(vocaName)"
                 cell.detailTextLabel?.text = "\(vocaMean)"

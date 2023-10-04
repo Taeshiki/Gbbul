@@ -30,16 +30,22 @@ enum LayoutMultiplier: CGFloat {
     }
 }
 class SignInViewController: BaseViewController {
-    private lazy var titleLabel : UILabel = {
-        let titleLabel = UILabel()
-        titleLabel.setUpLabel(title: "Hello Gbbul!", fontSize: .large)
-        return titleLabel
-    }()
-    private lazy var nicknameLabel : UILabel = {
-        let titleLabel = UILabel()
-        titleLabel.setUpLabel(title: "닉네임", fontSize: .medium)
-        return titleLabel
-    }()
+//    private lazy var titleLabel : UILabel = {
+//        let titleLabel = UILabel()
+//        titleLabel.setUpLabel(title: """
+//                              아는건 '쥐뿔'도 없지만
+//                              """, fontSize: .large)
+//        return titleLabel
+//    }()
+    private lazy var titleLabel : UIButton = {
+        let image = UIImage(named: "logo")
+        //let resizedImage = $0.resizeImageButton(image: image, width: 60, height: 60, color: Palette.boldPink.getColor())
+        $0.setImage(image, for: .normal)
+        //$0.tintColor = Palette.purple.getColor()
+        $0.setTitleColor(Palette.white.getColor(), for: .normal)
+        return $0
+    }(UIButton(type: .custom))
+    
     private lazy var inputTextField : UITextField = {
         let inputTextField = UITextField()
         inputTextField.setUpTextField()
@@ -73,23 +79,18 @@ class SignInViewController: BaseViewController {
         UserDefaults.standard.setValue(true, forKey: "isUserLoggedIn")
     }
     private func configUI(){
-        [titleLabel,nicknameLabel,inputTextField,confirmButton].forEach(view.addSubview)
+        [titleLabel,inputTextField,confirmButton].forEach(view.addSubview)
         titleLabel.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(ConstMargin.safeAreaTopMargin.getMargin()).offset(200)
-            $0.centerX.equalToSuperview()
-        }
-        nicknameLabel.snp.makeConstraints {
-            $0.leading.equalTo(titleLabel.snp.leading)
-            $0.top.equalTo(titleLabel.snp.bottom).offset(20)
-        }
-        titleLabel.isHidden = false
-        nicknameLabel.isHidden = true
-        inputTextField.isHidden = false
-        confirmButton.isHidden = false
-        inputTextField.snp.makeConstraints {
-            $0.top.equalTo(nicknameLabel.snp.bottom).offset(10)
+            $0.bottom.equalTo(inputTextField.snp.top).offset(-ConstMargin.safeAreaBottomMargin.getMargin())
             $0.leading.equalTo(view.safeAreaLayoutGuide.snp.leading).offset(ConstMargin.safeAreaLeftMargin.getMargin())
             $0.trailing.equalTo(view.safeAreaLayoutGuide.snp.trailing).offset(-ConstMargin.safeAreaLeftMargin.getMargin())
+            $0.centerX.equalToSuperview()
+            $0.height.equalTo(200)
+        }
+        inputTextField.snp.makeConstraints {
+            $0.centerY.equalToSuperview()
+            $0.leading.equalTo(titleLabel.snp.leading)
+            $0.trailing.equalTo(titleLabel.snp.trailing)
             $0.height.equalToSuperview().multipliedBy(LayoutMultiplier.extraSmall.getScale())
         }
         confirmButton.snp.makeConstraints {
