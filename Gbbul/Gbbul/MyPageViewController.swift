@@ -97,7 +97,8 @@ class MyPageViewController: BaseViewController {
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        Task{
+        Task.detached(priority : .background){ [weak self] in
+            guard let self = self else {return}
             await loadMyPageData()
         }
     }
@@ -149,11 +150,14 @@ class MyPageViewController: BaseViewController {
     }
 }
 extension MyPageViewController{
-    private func loadMyPageData() async {
-        await clearMyPageData()
-        await loadCorrectRateData()
-        await loadUserData()
-        updateUI()
+    private func loadMyPageData(){
+        Task.detached(priority : .background){[weak self] in
+            guard let self = self else {return}
+            await clearMyPageData()
+            await loadCorrectRateData()
+            await loadUserData()
+            await updateUI()
+        }
     }
     private func clearMyPageData() async {
         bookData.removeAll()
