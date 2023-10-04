@@ -13,6 +13,7 @@ class BookViewController: UIViewController {
     private let tableView: UITableView = {
         let tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         return tableView
     }()
     
@@ -87,6 +88,7 @@ extension BookViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // 선택한 셀의 Book 데이터 가져오기
         let selectedBook = bookDataFromCoreData[indexPath.row]
+        tableView.deselectRow(at: indexPath, animated: true)
         
         // 선택한 책의 bookId 가져오기
         let selectedBookId = selectedBook.bookId
