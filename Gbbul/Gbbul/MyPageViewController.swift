@@ -14,45 +14,45 @@ class MyPageViewController: BaseViewController {
         return titleLabel
     }()
     private lazy var nicknameLabel : UILabel = {
-        let titleLabel = UILabel()
-        titleLabel.setUpLabel(title: "닉네임 :", fontSize: .medium, isFontBold:  false, titleColor: .lightGray)
-        return titleLabel
+        let nicknameLabel = UILabel()
+        nicknameLabel.setUpLabel(title: "닉네임 :", fontSize: .medium, isFontBold:  false, titleColor: .lightGray)
+        return nicknameLabel
     }()
     private lazy var levelLabel : UILabel = {
-        let titleLabel = UILabel()
-        titleLabel.setUpLabel(title: "레벨 : LV", fontSize: .medium,  isFontBold:  false, titleColor: .lightGray)
-        return titleLabel
+        let levelLabel = UILabel()
+        levelLabel.setUpLabel(title: "레벨 : LV", fontSize: .medium,  isFontBold:  false, titleColor: .lightGray)
+        return levelLabel
     }()
     private lazy var nextLabel : UILabel = {
-        let titleLabel = UILabel()
-        titleLabel.setUpLabel(title: "다음레벨 LV", fontSize: .small, titleColor: .lightGray)
-        return titleLabel
+        let nextLabel = UILabel()
+        nextLabel.setUpLabel(title: "다음레벨 LV", fontSize: .small, titleColor: .lightGray)
+        return nextLabel
     }()
     private lazy var myVocaLabel : UILabel = {
-        let titleLabel = UILabel()
-        titleLabel.setUpLabel(title: "단어 공유소", fontSize: .medium, titleColor: .lightGray)
-        return titleLabel
+        let myVocaLabel = UILabel()
+        myVocaLabel.setUpLabel(title: "단어 공유소", fontSize: .medium, titleColor: .lightGray)
+        return myVocaLabel
     }()
     private lazy var myBookLabel : UILabel = {
-        let titleLabel = UILabel()
-        titleLabel.setUpLabel(title: "내 단어장", fontSize: .medium, titleColor: .lightGray)
-        return titleLabel
+        let myBookLabel = UILabel()
+        myBookLabel.setUpLabel(title: "내 단어장", fontSize: .medium, titleColor: .lightGray)
+        return myBookLabel
     }()
     private lazy var ratingView: UIView = {
         let view = UIView()
         view.setUpView()
         
-        let stackView = UIStackView()
-        stackView.axis = .horizontal
-        stackView.alignment = .fill
-        stackView.distribution = .fillEqually
+        let ratingStackView = UIStackView()
+        ratingStackView.axis = .horizontal
+        ratingStackView.alignment = .fill
+        ratingStackView.distribution = .fillEqually
         for _ in 1...5 {
             let ratingView = UIView()
             ratingView.setUpView(borderColor : .purple, borderWidth: 1)
-            stackView.addArrangedSubview(ratingView)
+            ratingStackView.addArrangedSubview(ratingView)
         }
-        view.addSubview(stackView)
-        stackView.snp.makeConstraints {
+        view.addSubview(ratingStackView)
+        ratingStackView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
         return view
@@ -75,6 +75,12 @@ class MyPageViewController: BaseViewController {
     }()
     
     private var manager : GbbulManager!
+    private var bookData: [(bookId: Int, bookName: String, rate: Double)] = []
+    private var vocaData: [(bookId: Int, bookName: String, rate: Double)] = []
+    private var rateCount : Int = 0
+    private var level = 0
+    private var exp = 0
+    private var userName = ""
     init(manager : GbbulManager)
     {
         self.manager = manager
@@ -90,16 +96,11 @@ class MyPageViewController: BaseViewController {
         configUI()
     }
     override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(true)
-        loadCorrectRateData()
-        loadUserData()
-        loadTableView()
+        super.viewWillAppear(animated)
+        Task{
+            await loadMyPageData()
+        }
     }
-    private func loadTableView(){
-        bookTableView.reloadData()
-        vocaTableView.reloadData()
-    }
-    
     private func configUI(){
         [titleLabel,nicknameLabel,levelLabel,ratingView,nextLabel,myVocaLabel,nextLabel,myBookLabel,bookTableView,vocaTableView].forEach(view.addSubview)
         titleLabel.snp.makeConstraints {
@@ -148,60 +149,59 @@ class MyPageViewController: BaseViewController {
     }
 }
 extension MyPageViewController{
-    private func setRate(number: Int) {
-        for (_, subview) in ratingView.subviews.enumerated() {
-            if let stackView = subview as? UIStackView {
-                for (starIndex, starImageView) in stackView.arrangedSubviews.enumerated() {
-                    if starIndex < number {
-                        starImageView.backgroundColor = Palette.boldPink.getColor()
-                        
-                    } else {
-                        starImageView.backgroundColor = .white
-                    }
-                }
-            }
-        }
+    private func loadMyPageData() async {
+        await clearMyPageData()
+        await loadCorrectRateData()
+        await loadUserData()
+        updateUI()
     }
-    private func loadUserData() {
+    private func clearMyPageData() async {
+        bookData.removeAll()
+        vocaData.removeAll()
+        rateCount = 0
+    }
+    private func loadUserData() async  {
         guard let userData = manager.getUser(), let currentUser = userData.first else {
             showAlert(title: "에러", message: "유저정보가 존재하지 않습니다.")
             return
         }
-        if let userName = currentUser.name {
-            nicknameLabel.text = "닉네임 : " + userName
-        }
-        levelLabel.text = "레벨 : Lv" + String(currentUser.level)
-        nextLabel.text = "다음레벨 LV" + String(currentUser.level+1)
-        //let exp = currentUser.exp // Todo 레이팅 세팅.
-        let exp = 3
-        setRate(number: Int(exp))
-        
+        level = rateCount / 5
+        exp = rateCount % 5
+        userName = currentUser.name!
+        await manager.updateUser(exp: Int64(exp), level: Int64(level), name: userName)
     }
-    private func loadCorrectRateData(){
-        // Todo CoreData 기준으로 분류
-        for correctRate in correctRates {
-            let bookId = correctRate.bookId
-            let bookName: String
-            var rate: Double
+    private func loadCorrectRateData() async {
+        let bookList = await manager.getMyPageData()
+        for (bookId, bookName, rateValue) in bookList {
+            if rateValue == 100 {
+                rateCount += 1
+            }
             if bookId >= 5001 {
-                if let voca = vocas.first(where: { $0.bookId == bookId }) {
-                    bookName = voca.myBookName
-                    rate = correctRate.rate
-                    vocaData.append((bookId: bookId, bookName: bookName, rate: rate))
-                }
+                vocaData.append((bookId: bookId, bookName: bookName, rate: rateValue))
             } else {
-                if let book = myBooks.first(where: { $0.bookId == bookId }) {
-                    bookName = book.myBookName
-                    rate = correctRate.rate
-                    bookData.append((bookId: bookId, bookName: bookName, rate: rate))
+                bookData.append((bookId: bookId, bookName: bookName, rate: rateValue))
+            }
+        }
+    }
+    private func setRate(number: Int) {
+        for (_, subview) in ratingView.subviews.enumerated() {
+            if let stackView = subview as? UIStackView {
+                for (starIndex, starImageView) in stackView.arrangedSubviews.enumerated() {
+                    starImageView.backgroundColor = (starIndex < number) ? Palette.boldPink.getColor() : .white
                 }
             }
         }
-        for data in bookData {
-            print("bookData - > bookId: \(data.bookId), bookName: \(data.bookName), rate: \(data.rate)")
-        }
-        for data in vocaData {
-            print("vocaData - > bookId: \(data.bookId), bookName: \(data.bookName), rate: \(data.rate)")
+    }
+    private func updateUI(){
+        Task {@MainActor in
+            setRate(number: rateCount % 5)
+            
+            nicknameLabel.text = "닉네임 : " + userName
+            levelLabel.text = "레벨 : Lv" + String(level)
+            nextLabel.text = "다음레벨 LV" + String(level + 1)
+            
+            bookTableView.reloadData()
+            vocaTableView.reloadData()
         }
     }
 }
@@ -218,48 +218,63 @@ extension MyPageViewController : UITableViewDelegate, UITableViewDataSource
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "MyPageCustomCell") as? MyPageCustomCell else {
             return UITableViewCell()
         }
-
         if tableView == bookTableView {
             let book = bookData[indexPath.row]
-            configCellStyle(cell, bookName: book.bookName, bookId: book.bookId, rate: book.rate)
+            configCellStyle(cell, bookName: book.bookName, bookId: book.bookId, rate: Int(book.rate))
         } else {
             let voca = vocaData[indexPath.row]
-            configCellStyle(cell, bookName: voca.bookName, bookId: voca.bookId, rate: voca.rate)
+            configCellStyle(cell, bookName: voca.bookName, bookId: voca.bookId, rate: Int(voca.rate))
         }
         return cell
-    }
-    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        if tableView == bookTableView
-        {
-            let deleteAction = UIContextualAction(style: .destructive, title: "삭제") { (_, _, completion) in
-                print(bookData[indexPath.row].bookId) // Todo 삭제
-                completion(true)
-            }
-            let swipeConfig = UISwipeActionsConfiguration(actions: [deleteAction])
-            swipeConfig.performsFirstActionWithFullSwipe = false
-            return swipeConfig
-            
-        }else{
-            return nil
-        }
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if tableView == bookTableView
         {
-            let vc = MyBookViewController()
+            let vc = StudyViewController()
+            vc.bookId = Int64(bookData[indexPath.row].bookId)
+            navigationController?.pushViewController(vc, animated: true)
+        }else{
+            let vc = StudyViewController()
+            vc.bookId = Int64(vocaData[indexPath.row].bookId)
             navigationController?.pushViewController(vc, animated: true)
         }
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return view.bounds.height * LayoutMultiplier.extraSmall.getScale()
     }
-    func configCellStyle(_ cell: MyPageCustomCell, bookName: String, bookId: Int, rate: Double) {
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        if tableView == bookTableView {
+            let deleteAction = UIContextualAction(style: .destructive, title: "삭제") { [weak self] (_, _, completion) in
+                guard let self = self else { return }
+                Task { [weak self] in //가독성때문에 weak self로 캡쳐.
+                    guard let self = self else{return}
+                    do {
+                        try await deleteBookItemAndReloadData(at: indexPath)
+                        completion(true)
+                    } catch {
+                        print("삭제 중 에러 발생: \(error.localizedDescription)")
+                        completion(false)
+                    }
+                }
+            }
+            let swipeConfig = UISwipeActionsConfiguration(actions: [deleteAction])
+            swipeConfig.performsFirstActionWithFullSwipe = false
+            return swipeConfig
+        } else {
+            return nil
+        }
+    }
+    
+    private func deleteBookItemAndReloadData(at indexPath: IndexPath) async throws{
+        await manager.deleteMyBookItem(bookId: Int64(bookData[indexPath.row].bookId))
+        await loadMyPageData()
+    }
+    private func configCellStyle(_ cell: MyPageCustomCell, bookName: String, bookId: Int, rate: Int) {
         cell.titleLabel.text = bookName
-        cell.bookId = bookId
         cell.correctRateLabel.text = "정답률 \(String(rate))%"
-        if rate == 100.0 {
+        if rate == 100 {
             cell.correctRateLabel.textColor = Palette.lightBlue.getColor()
-        } else if (rate >= 40.0 && rate < 100) {
+        } else if (rate >= 40 && rate < 100) {
             cell.correctRateLabel.textColor = Palette.lightGray.getColor()
         } else {
             cell.correctRateLabel.textColor = Palette.red.getColor()
@@ -281,7 +296,6 @@ class MyPageCustomCell : UITableViewCell
         correctRateLabel.textAlignment = .right
         return correctRateLabel
     }()
-    var bookId : Int = 0
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         configCellStyle()
@@ -309,53 +323,3 @@ class MyPageCustomCell : UITableViewCell
         }
     }
 }
-
-//Dummy
-struct correctRate{
-    let bookId : Int
-    let total : Int
-    let correct : Int
-    let incorrect : Int
-    let rate : Double
-}
-struct book{
-    let bookId : Int
-    let myBookName : String
-    let myCreateDate : String
-    
-}
-struct voca{
-    let bookId : Int
-    let myBookName : String
-    let myCreateDate : String
-}
-let myBooks: [book] = [
-    book(bookId: 0, myBookName: "IT 용어사전", myCreateDate: Date().GetCurrentTime()),
-    book(bookId: 1, myBookName: "영어 단어장", myCreateDate: Date().GetCurrentTime()),
-    book(bookId: 2, myBookName: "포르투갈어 단어장", myCreateDate: Date().GetCurrentTime()),
-    book(bookId: 3, myBookName: "스페인어 단어장", myCreateDate: Date().GetCurrentTime())
-]
-
-let vocas: [voca] = [
-    voca(bookId: 5001, myBookName: "정보처리기사 용어", myCreateDate: Date().GetCurrentTime()),
-    voca(bookId: 5002, myBookName: "빅데이터 용어", myCreateDate: Date().GetCurrentTime()),
-    voca(bookId: 5003, myBookName: "VR 용어", myCreateDate: Date().GetCurrentTime()),
-    voca(bookId: 5004, myBookName: "국어사전", myCreateDate: Date().GetCurrentTime()),
-    voca(bookId: 5005, myBookName: "영어사전", myCreateDate: Date().GetCurrentTime())
-]
-
-
-var correctRates : [correctRate] = [
-    correctRate(bookId: myBooks[0].bookId, total: 25, correct: 10, incorrect:20, rate: 45),
-    correctRate(bookId: myBooks[1].bookId, total: 25, correct: 10, incorrect:20, rate: 65),
-    correctRate(bookId: myBooks[2].bookId, total: 25, correct: 10, incorrect:20, rate: 78),
-    correctRate(bookId: myBooks[3].bookId, total: 25, correct: 10, incorrect:20, rate: 100),
-    correctRate(bookId: vocas[0].bookId, total: 25, correct: 10, incorrect:20, rate: 14),
-    correctRate(bookId: vocas[1].bookId, total: 25, correct: 10, incorrect:20, rate: 100),
-    correctRate(bookId: vocas[2].bookId, total: 25, correct: 10, incorrect:20, rate: 51),
-    correctRate(bookId: vocas[3].bookId, total: 25, correct: 10, incorrect:20, rate: 66),
-    correctRate(bookId: vocas[4].bookId, total: 25, correct: 10, incorrect:20, rate: 77)
-]
-
-var bookData: [(bookId: Int, bookName: String, rate: Double)] = []
-var vocaData: [(bookId: Int, bookName: String, rate: Double)] = []

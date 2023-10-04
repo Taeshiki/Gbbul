@@ -133,7 +133,7 @@ class GbbulManager {
             print("단어 삭제 중 오류 발생: \(error)")
         }
     }
-
+    
     
     func createMyVoca(bookId: Int64, vocaName: String, vocaMean: String) {
         guard let myVocaEntity = NSEntityDescription.entity(forEntityName: "MyVoca", in: mainContext) else {
@@ -155,14 +155,10 @@ class GbbulManager {
         
         saveContext()
     }
-    
-    
     func deleteMyVoca(myVoca: MyVoca) {
         mainContext.delete(myVoca)
         saveContext()
     }
-
-    
     func getMyVoca(by bookId: Int64) -> [MyVoca]? {
         let fetchRequest: NSFetchRequest<MyVoca> = MyVoca.fetchRequest()
         fetchRequest.predicate = NSPredicate(format: "bookId == %@", NSNumber(value: bookId))
@@ -175,12 +171,9 @@ class GbbulManager {
             return nil
         }
     }
-    
-    
     func getVoca(by bookId: Int64) -> [Voca]? {
         let fetchRequest: NSFetchRequest<Voca> = Voca.fetchRequest()
         fetchRequest.predicate = NSPredicate(format: "bookId == %@", NSNumber(value: bookId))
-        
         do {
             let vocas = try mainContext.fetch(fetchRequest)
             return vocas
@@ -189,8 +182,86 @@ class GbbulManager {
             return nil
         }
     }
-    
-
+    func deleteMyBookItem(bookId: Int64) async{
+        let bookIdPredicate = NSPredicate(format: "bookId == %@", NSNumber(value: bookId))
+        await deleteObjects(fetchRequest: MyBook.fetchRequest(), predicate: bookIdPredicate)
+        await deleteObjects(fetchRequest: MyVoca.fetchRequest(), predicate: bookIdPredicate)
+        await deleteObjects(fetchRequest: CorrectRate.fetchRequest(), predicate: bookIdPredicate)
+    }
+    func deleteObjects<T: NSManagedObject>(fetchRequest: NSFetchRequest<T>, predicate: NSPredicate)  async where T : NSObjectProtocol {
+        do {
+            try await mainContext.perform { [weak self] in
+                guard let self = self else { return }
+                fetchRequest.predicate = predicate
+                let objects = try mainContext.fetch(fetchRequest)
+                for object in objects {
+                    mainContext.delete(object)
+                }
+                saveContext()
+            }
+        } catch {
+            mainContext.rollback()
+            fatalError("\(T.description()) 삭제 중 에러 발생: \(error.localizedDescription)")
+        }
+    }
+    func updateUser(exp : Int64, level : Int64, name : String) async{
+        let request = NSFetchRequest<User>(entityName: "User")
+        request.predicate = NSPredicate(format: "name == %@", name)
+        do {
+            try await mainContext.perform{ [weak self] in
+                guard let self = self else {return}
+                let fetchedUser = try mainContext.fetch(request)
+                if let user = fetchedUser.first {
+                    user.exp = exp
+                    user.name = name
+                    user.level = level
+                    saveContext()
+                }
+            }
+        } catch {
+            mainContext.rollback()
+            fatalError("User 업데이트 중 에러 발생: \(error.localizedDescription)")
+        }
+    }
+    func getMyPageData() async -> [(Int, String, Double)] {
+        var myPageData : [(Int, String, Double)] = []
+        var correctData : [CorrectRate] = []
+        do {
+            try await mainContext.perform { [weak self] in
+                guard let self = self else { return }
+                
+                let fetchCorrectRate: NSFetchRequest<CorrectRate> = CorrectRate.fetchRequest()
+                correctData = try mainContext.fetch(fetchCorrectRate)
+                
+                let fetchMyBookRequest: NSFetchRequest<MyBook> = MyBook.fetchRequest()
+                let mybookData = try mainContext.fetch(fetchMyBookRequest)
+                let fetchBookRequest: NSFetchRequest<Book> = Book.fetchRequest()
+                let bookData = try mainContext.fetch(fetchBookRequest)
+                
+                for myBook in mybookData {
+                    let newData = (Int(myBook.bookId), myBook.myBookName ?? "", 0.0)
+                    myPageData.append(newData)
+                }
+                
+                for book in bookData {
+                    let newData = (Int(book.bookId), book.bookName ?? "", 0.0)
+                    myPageData.append(newData)
+                }
+                
+                for i in 0..<correctData.count {
+                    let bookId = correctData[i].bookId
+                    let rate = correctData[i].rate
+                    
+                    if let existingIndex = myPageData.firstIndex(where: { $0.0 == Int(bookId) }) {
+                        myPageData[existingIndex] = (Int(bookId), myPageData[existingIndex].1, rate)
+                    }
+                }
+            }
+        } catch {
+            fatalError("데이터 로드 중 에러 발생 -> \(error.localizedDescription)")
+        }
+        return myPageData
+    }
     func createCorrectRate(by bookId: Int64, correct: Int, incorrect: Int, rate: Double, total: Int) {
         guard let correctRateEntity = NSEntityDescription.entity(forEntityName: "CorrectRate", in: mainContext) else {
             fatalError("CorrectRate Entity를 찾을 수 없습니다.")
@@ -203,10 +274,9 @@ class GbbulManager {
         correctRate.setValue(incorrect, forKey: "incorrect")
         correctRate.setValue(rate, forKey: "rate")
         correctRate.setValue(total, forKey: "total")
-        
         saveContext()
     }
-
+    
     func createBook(bookName: String, bookId: Int){
         guard let BookEntity = NSEntityDescription.entity(forEntityName: "Book", in: mainContext) else {
             fatalError("Book Entity를 찾을 수 없습니다.")
