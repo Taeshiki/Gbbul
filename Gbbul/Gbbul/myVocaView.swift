@@ -56,6 +56,7 @@ class myVocaView: BaseViewController {
     
     let vocaTableView: UITableView = {
         $0.setUpTableView(borderColor : .purple)
+        $0.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         return $0
     }(UITableView())
     

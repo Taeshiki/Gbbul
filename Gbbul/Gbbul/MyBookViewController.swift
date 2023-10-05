@@ -37,6 +37,7 @@ class MyBookViewController: BaseViewController {
         tv.layer.borderWidth = 1
         tv.layer.borderColor = Palette.purple.getColor().cgColor
         tv.layer.cornerRadius = 10
+        tv.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         return tv
     }()
     

@@ -30,18 +30,9 @@ enum LayoutMultiplier: CGFloat {
     }
 }
 class SignInViewController: BaseViewController {
-//    private lazy var titleLabel : UILabel = {
-//        let titleLabel = UILabel()
-//        titleLabel.setUpLabel(title: """
-//                              아는건 '쥐뿔'도 없지만
-//                              """, fontSize: .large)
-//        return titleLabel
-//    }()
     private lazy var titleLabel : UIButton = {
         let image = UIImage(named: "logo")
-        //let resizedImage = $0.resizeImageButton(image: image, width: 60, height: 60, color: Palette.boldPink.getColor())
         $0.setImage(image, for: .normal)
-        //$0.tintColor = Palette.purple.getColor()
         $0.setTitleColor(Palette.white.getColor(), for: .normal)
         return $0
     }(UIButton(type: .custom))

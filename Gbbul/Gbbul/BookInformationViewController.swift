@@ -16,6 +16,7 @@ class BookInformationViewController: UIViewController {
     private let tableView: UITableView = {
         let tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         return tableView
     }()
     
@@ -111,6 +112,9 @@ extension BookInformationViewController: UITableViewDataSource, UITableViewDeleg
                 cell.textLabel?.text = "데이터 없음"
             }
         return cell
+    }
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
     }
     
 }

@@ -231,7 +231,9 @@ extension MyPageViewController : UITableViewDelegate, UITableViewDataSource
         }
         return cell
     }
+
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
         if tableView == bookTableView
         {
             let vc = StudyViewController()
@@ -285,7 +287,6 @@ extension MyPageViewController : UITableViewDelegate, UITableViewDataSource
         }
     }
 }
-
 class MyPageCustomCell : UITableViewCell
 {
     var titleLabel : UILabel = {
@@ -310,7 +311,6 @@ class MyPageCustomCell : UITableViewCell
     }
     private func configCellStyle(){
         self.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-        self.selectionStyle = .none
     }
     
     private func configUI() {
