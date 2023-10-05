@@ -27,8 +27,6 @@
 * **학습하기** : 단어장의 단어 데이터를 기반으로 단어를 스와이프하여 암기하는 페이지
 * **로컬 푸쉬** : 앱이 백그라운드에 진입했을 때 랜덤하게 오늘의 단어를 보여주는 기능
       
-**※시연 영상 : https://ko.wikipedia.org/wiki/RGB**
-
 
 # 개발환경
 **개발언어** : <img src="https://img.shields.io/badge/Swift-FFCCCC?style=for-the-badge&logo=Swift&logoColor=white">  
